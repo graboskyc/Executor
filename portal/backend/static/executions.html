@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.lime.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
         
-        <script src="/js/workflows.js"></script>
+        <script src="/js/executions.js"></script>
         <link rel="stylesheet" href="/css/custom.css" />
 
         <style>
@@ -29,24 +29,32 @@
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="templates.html">Templates</a></li>
-                        <li><a href="executions.html">Executions</a></li>
                     </ul>
                 </nav>
             </article>
 
-            <article>
-                <h1>Your saved workflows</h1>
-                <ul :aria-busy="workflows.length === 0 ? 'true':'false'">
-                    <template x-for="w in workflows">
-                        <li>
-                            <a x-text="w.name" :href="'workflow.html?_id=' + w._id.$oid"></a>
-                        </li>
-                    </template>
-                </ul>
+            <article class="grid" style="min-height: 80vh;">
+                <article x-show="executions.length > 0">
+                    <h1>Executions</h1>
+                    <ul>
+                        <template x-for="e in executions">
+                            <li x-text="e.workflow.name" x-on:click="loadSteps(e._id)"></li>
+                        </template>
+                </article>
 
-                                            
-                <button x-on:click="newWorkflow">New Workflow</button>
-                
+                <article x-show="steps != null">
+                    <h1>Steps</h1>
+                    <ul>
+                        <template x-for="s in steps">
+                            <li x-text="s.title" x-on:click="selectedStep = s"></li>
+                        </template>
+                    </ul>
+                </article>
+
+                <article x-show="selectedStep != null">
+                    <h1>Execution</h1>
+                    <code x-text="selectedStep.result" style="width: 100%; min-height: 90%;"></code>
+                </article>
             </article>
     </body>
 </html>

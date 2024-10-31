@@ -108,6 +108,16 @@ async def downloadZip(pointerid: str):
     file = fs.get(ObjectId(pointerid))
     return StreamingResponse(file, media_type="application/zip")
 
+@api_app.get("/crud/listAllExecutions")
+async def listAllExecutions():
+    cursor = db["executions"].find({}).sort("_id", pymongo.DESCENDING)
+    return json.loads(dumps(cursor))
+
+@api_app.get("/crud/listExecutionSteps/{id}")
+async def listExecutionSteps(id:str):
+    d = db["executions"].find_one({"_id": ObjectId(id) })
+    return json.loads(dumps(d))
+
 @api_app.get("/hello")
 async def hello():
     return {"message": "Hello World"}
