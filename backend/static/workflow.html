@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="color-scheme" content="light" />
+        
+        <title>Executor</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.lime.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+        
+        <script src="/js/components.templateBox.js"></script>
+        <script src="/js/workflow.js"></script>
+        <link rel="stylesheet" href="/css/custom.css" />
+
+        <style>
+           
+        </style>
+
+    </head>
+    <body data-theme="light">
+        <div x-data="init()" x-init="loadList" data-theme="light" class="container">
+            <nav data-theme="dark">
+                <ul>
+                    <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
+                </ul>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="templates.html">Templates</a></li>
+                    <li><a href="workflows.html">Workflows</a></li>
+                </ul>
+            </nav>
+
+            <article>
+                <div class="grid">
+                    <article>
+                        <h2>Tool Templates</h2>
+                        <ul :aria-busy="allTemplates.length === 0 ? 'true':'false'">
+                            <template x-for="t in allTemplates">
+                                <li class="tb_li" x-on:click="appendWf(t)">
+                                    <template-box :title="t.title" :icon="t.icon"></template-box>
+                                </li>
+                            </template>
+                        </ul>
+                    </article>
+
+                    <article>
+                        <h1>Edit Workflow</h1>
+                        <h2>Details</h2>
+                        <label for="title">Name</label>
+                        <input type="text" placeholder="title" name="title" x-model="workflow.name">
+
+                        <h2>Flow</h2>
+                        <ul :aria-busy="workflow.wf.length === 0 ? 'true':'false'">
+                            <li class="fl_endblocks">START</li>
+                            <li class="fl_straightline"></li>
+                            <template x-for="t in workflow.wf">
+                                <li class="tb_li">
+                                    <template-box :title="t.title" :icon="t.icon"></template-box>
+                                </li>
+                                <li class="fl_straightline"></li>
+                            </template>
+                            <li class="fl_endblocks">END</li>
+                        </ul>
+                        
+                        <button x-on:click="saveWorkflow">Save Workflow</button>
+                    </article>
+                </div>
+            </article>
+    </body>
+</html>

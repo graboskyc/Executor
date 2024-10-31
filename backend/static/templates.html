@@ -31,7 +31,9 @@
                 <div class="grid">
                     <ul :aria-busy="allTemplates.length === 0 ? 'true':'false'">
                         <template x-for="t in allTemplates">
-                            <template-box :title="t.title" :icon="t.icon"></template-box>
+                            <li class="tb_li">
+                                <template-box :title="t.title" :icon="t.icon"></template-box>
+                            </li>
                         </template>
                     </ul>
 

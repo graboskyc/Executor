@@ -8,7 +8,6 @@ function init() {
         async loadList() {
             console.log('Loading List');
             this.allTemplates= await (await fetch('/api/crud/listAllTemplate')).json();
-            console.log(this.foo);
         },
 
         async saveTemplate() {

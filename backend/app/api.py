@@ -43,10 +43,20 @@ async def newTemplate(d: Dict[Any, Any]):
 
 @api_app.get("/crud/newWorkflow")
 async def new():
-    obj = {"name":"New Subscription", "wf":"[]", "modified":datetime.utcnow() }
+    obj = {"name":"New Subscription", "wf":[] }
     id = db["workflows"].insert_one(obj).inserted_id
     obj["_id"] = id
     return json.loads(dumps(obj))
+
+@api_app.get("/crud/getWorkflow/{id}")
+async def getWorkflowById(id:str):
+    d = db["workflows"].find_one({"_id": ObjectId(id) })
+    return json.loads(dumps(d))
+
+@api_app.put("/crud/saveWorkflow/{id}")
+async def saveWorkflow(id:str, d: Dict[Any,Any]):
+    d.pop("_id")
+    db["workflows"].update_one({"_id": ObjectId(id) }, {"$set": d })
 
 @api_app.get("/hello")
 async def hello():

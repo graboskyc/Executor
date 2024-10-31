@@ -53,3 +53,7 @@ label {
     width: 64px;
     margin-left: 10px;
 }
+
+.fl_endblocks, .tb_li, .fl_straightline {
+    list-style-type: none !important;
+}

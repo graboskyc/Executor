@@ -10,7 +10,7 @@ function init() {
         async newWorkflow() {
             console.log('New Workflow');
             var retVal = await (await fetch('/api/crud/newWorkflow')).json();
-            window.location = "/workflow.html?_id="+retVal["_id"];
+            window.location = "/workflow.html?_id="+retVal._id.$oid;;
         }, 
 
 

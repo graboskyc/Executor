@@ -32,10 +32,11 @@
             </nav>
 
             <article>
+                <h1>Your saved workflows</h1>
                 <ul :aria-busy="workflows.length === 0 ? 'true':'false'">
                     <template x-for="w in workflows">
                         <li>
-                            <a x-text="w.name" :href="'template.html?_id=' + w._id"></a>
+                            <a x-text="w.name" :href="'workflow.html?_id=' + w._id.$oid"></a>
                         </li>
                     </template>
                 </ul>

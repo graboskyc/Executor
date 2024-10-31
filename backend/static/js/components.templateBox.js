@@ -20,12 +20,10 @@ class TemplateBox extends HTMLElement {
 
     connectedCallback() {
       this.innerHTML = `
-        <li class="tb_li">
         <div class='grid'>
             <div class="material-symbols-outlined tb_circle">${this.icon}</div>
             <div class="tb_title">${this.title}</div>
         </div>
-        </li>
       `
     }
     
