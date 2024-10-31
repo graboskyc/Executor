@@ -3,6 +3,7 @@ function init() {
         executions: [],
         steps: null,
         selectedStep: null,
+        selectedId:null,
        
         async loadList() {
             console.log('Loading List');
@@ -13,6 +14,7 @@ function init() {
 
         async loadSteps(executionId) {
             console.log('Loading Steps');
+            this.selectedId = executionId;
             var result = await (await fetch(`/api/crud/listExecutionSteps/${executionId["$oid"]}`)).json();
             this.steps = result.workflow.wf;
         },

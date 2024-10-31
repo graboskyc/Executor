@@ -27,7 +27,7 @@ if [ $EXITCODE -eq 0 ]
     echo
     docker stop executoragent
     docker rm executoragent
-    docker run -t -i -d --name executoragent -e "PORTAL=${PORTAL}" graboskyc/executoragent:${abbrvhash}
+    docker run -t -i -d --name executoragent -e "PORTAL=${PORTAL}" --restart unless-stopped graboskyc/executoragent:${abbrvhash}
 
     echo
     echo "+================================"

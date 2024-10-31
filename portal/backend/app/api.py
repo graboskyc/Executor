@@ -91,8 +91,11 @@ async def newTemplate(id:str, d: Dict[Any, Any]):
 async def getNextExecution(server: Dict[Any, Any]):
     wf = db["executions"].find_one({"status": "queued" })
     print(wf)
-    db["executions"].update_one({"_id": wf["_id"] }, {"$set": {"status": "allocated", "ownedBy":server["name"]} })
-    return json.loads(dumps(wf))
+    if wf:
+        db["executions"].update_one({"_id": wf["_id"] }, {"$set": {"status": "allocated", "ownedBy":server["name"]} })
+        return json.loads(dumps(wf))
+    else:
+        return {"workflow":{"wf":[]}}
 
 @api_app.post("/exec/executionOutput")
 async def executionOutput(q: Dict[Any, Any]):

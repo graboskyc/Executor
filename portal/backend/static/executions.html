@@ -35,7 +35,7 @@
 
             <article class="grid" style="min-height: 80vh;">
                 <article x-show="executions.length > 0">
-                    <h1>Executions</h1>
+                    <h1>Executions <span class="material-symbols-outlined" x-on:click="loadList">frame_reload</span></h1>
                     <ul>
                         <template x-for="e in executions">
                             <li x-on:click="loadSteps(e._id)">
@@ -48,7 +48,7 @@
                 </article>
 
                 <article x-show="steps != null">
-                    <h1>Steps</h1>
+                    <h1>Steps <span class="material-symbols-outlined" x-on:click="loadSteps(selectedId)">frame_reload</span></h1>
                     <ul>
                         <template x-for="s in steps">
                             <li x-on:click="selectedStep = s">
