@@ -48,9 +48,14 @@ async def newTemplate(file: UploadFile = File(), template: str = Form()):
     db["templates"].insert_one(tobj)
 
 @api_app.put("/crud/saveTemplate/{id}")
-async def saveTemplate(id:str, d: Dict[Any,Any]):
+async def saveTemplate(id:str, file: UploadFile = File(), template: str = Form()):
+    d = json.loads(template)
     d.pop("_id")
     db["templates"].update_one({"_id": ObjectId(id) }, {"$set": d })
+    if file:
+        contents = file.file.read()
+        pointer = gridfs.GridFS(db).put(contents, filename=d["title"])
+        db["templates"].update_one({"_id": ObjectId(id) }, {"$set": {"gridfspointer": pointer} })
 
 @api_app.get("/crud/newWorkflow")
 async def new():

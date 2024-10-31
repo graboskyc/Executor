@@ -7,6 +7,7 @@ function init() {
 
         defaultList() {
             this.selectedTemplate= {title:"",engine:"python3",arguments:[], icon:"code"};
+            this.file = null;
         },
 
         async loadList() {
