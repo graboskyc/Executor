@@ -1,37 +1,39 @@
 function init() {
     return {
         allTemplates: [],
-        selectedTemplate: {title:"",engine:"python3",arguments:[], icon:"code"},
+        selectedTemplate: {},
         newArgument: {key:"",friendlyName:""},
-        
+        file: null,
+
+        defaultList() {
+            this.selectedTemplate= {title:"",engine:"python3",arguments:[], icon:"code"};
+        },
 
         async loadList() {
+            this.defaultList();
             console.log('Loading List');
             this.allTemplates= await (await fetch('/api/crud/listAllTemplate')).json();
         },
 
-        async saveTemplate() {            
+        async saveTemplate() {
             console.log(this.selectedTemplate);
+            var data = new FormData()
+            data.append('file', this.file[0])
+            data.append('template', JSON.stringify(this.selectedTemplate))
             if("_id" in this.selectedTemplate) {
                 console.log('Saving Template');
                 var id = this.selectedTemplate._id.$oid;
                 await fetch('/api/crud/saveTemplate/'+id, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(this.selectedTemplate)
+                    body: data
                 });
             } else {
                 console.log('Creating Template');
                 await fetch('/api/crud/newTemplate', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(this.selectedTemplate)
+                    body: data
                 });
-                this.selectedTemplate= {title:"",engine:"python3",arguments:[], icon:"code"};
+                this.defaultList();
             }
             await this.loadList();
         },

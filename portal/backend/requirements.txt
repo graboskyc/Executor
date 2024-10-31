@@ -1,4 +1,5 @@
 fastapi
+python-multipart
 uvicorn
 pymongo[srv,tls]
 dnspython

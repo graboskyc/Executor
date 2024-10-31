@@ -43,7 +43,8 @@
                     </div>
 
                     <div>
-                        <h1>Edit Template</h1>
+                        <h1 x-show="'_id' in selectedTemplate">Edit Template</h1>
+                        <h1 x-show="!('_id' in selectedTemplate)">Create Template</h1>
                         <label for="title">Title</label>
                         <input type="text" placeholder="title" name="title" x-model="selectedTemplate.title">
 
@@ -55,6 +56,10 @@
 
                         <label for="icon">Material Icon</label>
                         <input type="text" placeholder="code" name="icon" x-model="selectedTemplate.icon">
+
+                        <label for="file">Zip File</label>
+                        <span x-text="file ? file.name : 'Choose zip file...'"></span>
+                        <input type="file" accept=".zip" x-on:change="file = Object.values($event.target.files)" />
 
                         <table>
                             <thead>
@@ -91,7 +96,9 @@
                         </table>
                         
                         
-                        <button x-on:click="saveTemplate">Save</button>
+                        <button x-on:click="saveTemplate" x-show="'_id' in selectedTemplate">Save</button>
+                        <button x-on:click="saveTemplate" x-show="!('_id' in selectedTemplate)">Create</button>
+                        <button x-on:click="defaultList()" class="secondary">Reset</button>
                     </div>
                 </div>
             </article>

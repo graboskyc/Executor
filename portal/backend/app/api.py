@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, File, UploadFile, Form
 import pymongo
 from datetime import datetime
 from datetime import timezone
@@ -11,6 +11,7 @@ import os
 import requests
 from typing import Dict, Any
 from fastapi.middleware.cors import CORSMiddleware
+import gridfs
 
 api_app = FastAPI(title="api-app")
 app = FastAPI(title="spa-app")
@@ -38,9 +39,13 @@ async def listAllTemplates():
     return json.loads(dumps(cursor))
 
 @api_app.post("/crud/newTemplate")
-async def newTemplate(d: Dict[Any, Any]):
-    print(d)
-    db["templates"].insert_one(d)
+async def newTemplate(file: UploadFile = File(), template: str = Form()):
+    print(template)
+    tobj = json.loads(template)
+    contents = file.file.read()
+    pointer = gridfs.GridFS(db).put(contents, filename=tobj["title"])
+    tobj["gridfspointer"] = pointer
+    db["templates"].insert_one(tobj)
 
 @api_app.put("/crud/saveTemplate/{id}")
 async def saveTemplate(id:str, d: Dict[Any,Any]):
