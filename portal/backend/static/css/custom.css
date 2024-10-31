@@ -63,3 +63,8 @@ label {
     width: 5px;
     background-color: #000000;
 }
+
+body {
+    min-height: 100vh !important;
+    background-color: var(--pico-primary-background) !important;
+}

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,27 +17,33 @@
     </head>
     <body data-theme="light">
         <div x-data="init()" x-init="loadList" data-theme="light" class="container">
-            <nav data-theme="dark">
-                <ul>
-                    <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
-                </ul>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="workflows.html">Workflows</a></li>
-                </ul>
-            </nav>
+            <article>
+                <nav data-theme="dark">
+                    <ul>
+                        <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
+                    </ul>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="workflows.html">Workflows</a></li>
+                    </ul>
+                </nav>
+            </article>
 
             <article>
                 <div class="grid">
-                    <ul :aria-busy="allTemplates.length === 0 ? 'true':'false'">
-                        <template x-for="t in allTemplates">
-                            <li class="tb_li">
-                                <template-box :title="t.title" :icon="t.icon"></template-box>
-                            </li>
-                        </template>
-                    </ul>
+                    <div>
+                        <h1>Template Toolbox</h1>
+                        <ul :aria-busy="allTemplates.length === 0 ? 'true':'false'">
+                            <template x-for="t in allTemplates">
+                                <li class="tb_li"  x-on:click="selectedTemplate = t">
+                                    <template-box :title="t.title" :icon="t.icon"></template-box>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
 
                     <div>
+                        <h1>Edit Template</h1>
                         <label for="title">Title</label>
                         <input type="text" placeholder="title" name="title" x-model="selectedTemplate.title">
 

@@ -41,6 +41,11 @@ async def newTemplate(d: Dict[Any, Any]):
     print(d)
     db["templates"].insert_one(d)
 
+@api_app.put("/crud/saveTemplate/{id}")
+async def saveTemplate(id:str, d: Dict[Any,Any]):
+    d.pop("_id")
+    db["templates"].update_one({"_id": ObjectId(id) }, {"$set": d })
+
 @api_app.get("/crud/newWorkflow")
 async def new():
     obj = {"name":"New Subscription", "wf":[] }
