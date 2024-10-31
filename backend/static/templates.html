@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="color-scheme" content="light" />
+        
+        <title>Executor</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.lime.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+        <script src="/js/templates.js"></script>
+        <link rel="stylesheet" href="/css/custom.css" />
+
+        <style>
+            .templates { 
+                list-style-type: none !important;
+                margin: 10px;
+                height: 64px;
+                border-style: solid;
+            }
+            .material-symbols-outlined {
+                height: 64px;
+                font-size: 64px;
+                border-radius: 32px;
+                background-color: #a5d601;
+                width: 64px;
+                margin-left: 10px;
+            }
+
+        </style>
+
+    </head>
+    <body data-theme="light">
+        <div x-data="init()" x-init="loadList" data-theme="light" class="container">
+            <nav data-theme="dark">
+                <ul>
+                    <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
+                </ul>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="workflows.html">Workflows</a></li>
+                </ul>
+            </nav>
+
+            <article>
+                <div class="grid">
+                    <ul :aria-busy="allTemplates.length === 0 ? 'true':'false'">
+                        <template x-for="t in allTemplates">
+                            <li class="templates">
+                                <div class="grid">
+                                    <div class="material-symbols-outlined" x-text="t.icon"></div>
+                                    <div x-text="t.title"></div>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+
+                    <div>
+                        <label for="title">Title</label>
+                        <input type="text" placeholder="title" name="title" x-model="selectedTemplate.title">
+
+                        <label for="engine">Engine</label>
+                        <select x-model="selectedTemplate.engine">
+                            <option value="python3">python3</option>
+                            <option value="nodejs">node</option>
+                        </select>
+
+                        <label for="icon">Material Icon</label>
+                        <input type="text" placeholder="code" name="icon" x-model="selectedTemplate.icon">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Friendly Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="a in selectedTemplate.arguments">
+                                    <tr>
+                                        <td x-text="a.key"></td>
+                                        <td x-text="a.friendlyName"></td>
+                                        <td>
+                                            <button class="btn-delete" x-on:click="selectedTemplate.arguments = selectedTemplate.arguments.filter((c) => c != a)">
+                                                <span class="material-symbols-outlined">delete</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td><input type="text" placeholder="key" x-model="newArgument.key" /></td>
+                                    <td><input type="text" placeholder="friendly name" x-model="newArgument.friendlyName" /></td>
+                                    <td>
+                                        <button x-on:click="pushNewArgument">
+                                            <span class="material-symbols-outlined">add</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        
+                        
+                        <button x-on:click="saveTemplate">Save</button>
+                    </div>
+                </div>
+            </article>
+    </body>
+</html>

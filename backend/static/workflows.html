@@ -11,23 +11,38 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.lime.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
+        <script src="/js/workflows.js"></script>
         <link rel="stylesheet" href="/css/custom.css" />
+
+        <style>
+           
+        </style>
 
     </head>
     <body data-theme="light">
-        <div data-theme="light" class="container">
+        <div x-data="init()" x-init="loadList" data-theme="light" class="container">
             <nav data-theme="dark">
                 <ul>
                     <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
                 </ul>
                 <ul>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="templates.html">Templates</a></li>
-                    <li><a href="workflows.html">Workflows</a></li>
                 </ul>
             </nav>
 
             <article>
-                <h1>Executor</h1>
+                <ul :aria-busy="workflows.length === 0 ? 'true':'false'">
+                    <template x-for="w in workflows">
+                        <li>
+                            <a x-text="w.name" :href="'template.html?_id=' + w._id"></a>
+                        </li>
+                    </template>
+                </ul>
+
+                                            
+                <button x-on:click="newWorkflow">New Workflow</button>
+                
             </article>
     </body>
 </html>

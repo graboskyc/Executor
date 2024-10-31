@@ -1,0 +1,18 @@
+function init() {
+    return {
+        workflows: [],
+       
+        async loadList() {
+            console.log('Loading List');
+            this.workflows= await (await fetch('/api/listAllWorkflows')).json();
+        }, 
+
+        async newWorkflow() {
+            console.log('New Workflow');
+            var retVal = await (await fetch('/api/newWorkflow')).json();
+            window.location = "/workflow.html?_id="+retVal["_id"];
+        }, 
+
+
+    }
+}
