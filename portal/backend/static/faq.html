@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="color-scheme" content="light" />
+        
+        <title>Executor</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.lime.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+        <link rel="stylesheet" href="/css/custom.css" />
+
+    </head>
+    <body data-theme="light">
+        <div data-theme="light" class="container">
+            <article>
+                <nav data-theme="dark">
+                    <ul>
+                        <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
+                    </ul>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="templates.html">Templates</a></li>
+                        <li><a href="workflows.html">Workflows</a></li>
+                        <li><a href="executions.html">Executions</a></li>
+                    </ul>
+                </nav>
+            </article>
+
+            <article>
+                <h1>Executor</h1>
+                
+                <p>Expand the informaion below to learn more about inner workings:</p>
+
+                <details>
+                    <summary role="button">What languages are supported</summary>
+                    <p>Python 3 right now only</p>
+                </details>
+
+                <details>
+                    <summary role="button">What are the install requirements</summary>
+                    <p>You need the Portal container and the Agent container</p>
+                </details>
+
+                <details>
+                    <summary role="button">How does this work</summary>
+                    <p>First create a <b>Template</b> which is the container for a script to run. See more details on script format below.</p>
+                    <p>Upload the zip file and metadata dettails</p>
+                    <p>Once complete, create a <b>Workflow</b> which has a name and a series of steps, each of which was a <b>Template</b></p>
+                    <p>Then you can Execute that task</p>
+                </details>
+
+                <details>
+                    <summary role="button">Can I enqueue outside the UI (such as an API)?</summary>
+                    <p>Yes</p>
+                    <p>Make an HTTP POST to <code>/exec/enqueueWorkflow/{id}</code> where the ID is the workflow ID (which you can get from the UI URL bar when editing a workflow)</p>
+                    <p>You can also include any other JSON object in the body and that will be passed into the scripts when they run later</p>
+                </details>
+
+                <details>
+                    <summary role="button">What are these material icons</summary>
+                    <p>See all icon names <a href="https://fonts.google.com/icons" target="_blank">here</a></p>
+                </details>
+
+                <details>
+                    <summary role="button">How do I make a script?</summary>
+                    <p>Scripts are called Templates</p>
+                    <p>There is a sample in the sample plugin directory on our <a href="https://github.com/graboskyc/Executor/tree/main/sample_plugin" target="_blank">github</a></p>
+                    <p>In short, the python file must be called <code>__init__.py</code> and support Python3 syntax</p>
+                    <p>If any additional packages are required, put them in the <code>requirements.txt</code> file</p>
+                    <p>Everything will be run in an venv so make sure every package you need is included</p>
+                </details>
+
+                <details>
+                    <summary role="button">Is there any context provided to the script?</summary>
+                    <p>Yes, an env variable called <code>EXECUTOR</code> is included. You should <code>json.loads(os.environ["EXECUTOR"])</code> to gain access to the format below:</p>
+                    <p>
+                        <code style="width: 100%; white-space: pre;">
+                            {
+                                "_id":{"$oid":"6723ae8ee9ebad747255ff55"},
+                                "payload":{
+                                    // any additional data you pass in when calling the enqueue API
+                                },
+                                "workflowId":"6723a5349df2474dd9315a8a",
+                                "status":"queued",
+                                "created":{"$date":"2024-10-31T16:21:34.541Z"},
+                                "modified":{"$date":"2024-10-31T16:21:34.541Z"},
+                                "workflow":{"_id":{"$oid":"6723a5349df2474dd9315a8a"},
+                                "name":"Buncha Hellos",
+                                "wf":[
+                                    {
+                                        "_id":{"$oid":"6723a5319df2474dd9315a89"},
+                                        "title":"Hello World With Time and Env",
+                                        "engine":"python3",
+                                        "arguments":[{"key":"key","friendlyName":"value"}],
+                                        "icon":"code",
+                                        "gridfspointer":{"$oid":"6723ad020bf8e5e2f1f3dfab"}
+                                    }
+                                ]
+                            }
+                        </code>
+                    </p>
+                </details>
+            </article>
+    </body>
+</html>
