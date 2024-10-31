@@ -13,6 +13,8 @@ print(response.text)
 resObj = json.loads(response.text)
 index = 0
 
+os.environ["EXECUTOR"] = response.text
+
 for wf in resObj['workflow']["wf"]:
     print("--------------------BEGIN WORKFLOW----------------------")
     templateFileId = wf["gridfspointer"]["$oid"]
@@ -46,5 +48,6 @@ for wf in resObj['workflow']["wf"]:
     print("--------------------END WORKFLOW----------------------")
     index += 1
 
-print("All workflows complete")
-response = requests.post(f"{server}/api/exec/completeExecution/"+resObj["_id"]["$oid"], json = agentDetails)
+if index > 0:
+    print("All workflows complete")
+    response = requests.post(f"{server}/api/exec/completeExecution/"+resObj["_id"]["$oid"], json = agentDetails)
