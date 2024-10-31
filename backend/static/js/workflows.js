@@ -4,12 +4,12 @@ function init() {
        
         async loadList() {
             console.log('Loading List');
-            this.workflows= await (await fetch('/api/listAllWorkflows')).json();
+            this.workflows= await (await fetch('/api/crud/listAllWorkflows')).json();
         }, 
 
         async newWorkflow() {
             console.log('New Workflow');
-            var retVal = await (await fetch('/api/newWorkflow')).json();
+            var retVal = await (await fetch('/api/crud/newWorkflow')).json();
             window.location = "/workflow.html?_id="+retVal["_id"];
         }, 
 

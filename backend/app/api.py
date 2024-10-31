@@ -26,22 +26,22 @@ app.add_middleware(
 client = pymongo.MongoClient(os.environ["MDBCONNSTR"].strip())
 db = client["excutor"]
 
-@api_app.get("/listAllTemplate")
+@api_app.get("/crud/listAllTemplate")
 async def listAllTemplates():
     cursor = db["templates"].find({}).sort("_id", pymongo.DESCENDING)
     return json.loads(dumps(cursor))
 
-@api_app.get("/listAllWorkflows")
+@api_app.get("/crud/listAllWorkflows")
 async def listAllTemplates():
     cursor = db["workflows"].find({}).sort("_id", pymongo.DESCENDING)
     return json.loads(dumps(cursor))
 
-@api_app.post("/newTemplate")
+@api_app.post("/crud/newTemplate")
 async def newTemplate(d: Dict[Any, Any]):
     print(d)
     db["templates"].insert_one(d)
 
-@api_app.get("/newWorkflow")
+@api_app.get("/crud/newWorkflow")
 async def new():
     obj = {"name":"New Subscription", "wf":"[]", "modified":datetime.utcnow() }
     id = db["workflows"].insert_one(obj).inserted_id
