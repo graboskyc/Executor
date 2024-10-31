@@ -11,27 +11,9 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.lime.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
+        <script src="/js/components.templateBox.js"></script>
         <script src="/js/templates.js"></script>
         <link rel="stylesheet" href="/css/custom.css" />
-
-        <style>
-            .templates { 
-                list-style-type: none !important;
-                margin: 10px;
-                height: 64px;
-                border-style: solid;
-            }
-            .material-symbols-outlined {
-                height: 64px;
-                font-size: 64px;
-                border-radius: 32px;
-                background-color: #a5d601;
-                width: 64px;
-                margin-left: 10px;
-            }
-
-        </style>
-
     </head>
     <body data-theme="light">
         <div x-data="init()" x-init="loadList" data-theme="light" class="container">
@@ -49,12 +31,7 @@
                 <div class="grid">
                     <ul :aria-busy="allTemplates.length === 0 ? 'true':'false'">
                         <template x-for="t in allTemplates">
-                            <li class="templates">
-                                <div class="grid">
-                                    <div class="material-symbols-outlined" x-text="t.icon"></div>
-                                    <div x-text="t.title"></div>
-                                </div>
-                            </li>
+                            <template-box :title="t.title" :icon="t.icon"></template-box>
                         </template>
                     </ul>
 

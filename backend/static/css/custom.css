@@ -38,3 +38,18 @@ label {
 .skeleton-text-body {
     width: 75%;
 }
+
+.tb_li { 
+    list-style-type: none !important;
+    margin: 10px;
+    height: 64px;
+    border-style: solid;
+}
+.tb_circle {
+    height: 64px;
+    font-size: 64px;
+    border-radius: 32px;
+    background-color: #a5d601;
+    width: 64px;
+    margin-left: 10px;
+}
