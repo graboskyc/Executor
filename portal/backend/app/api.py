@@ -91,16 +91,15 @@ async def newTemplate(id:str, d: Dict[Any, Any]):
 async def getNextExecution(server: Dict[Any, Any]):
     wf = db["executions"].find_one({"status": "queued" })
     print(wf)
-    #db["executions"].update_one({"_id": wf["_id"] }, {"$set": {"status": "allocated", "ownedBy":server["name"]} })
+    db["executions"].update_one({"_id": wf["_id"] }, {"$set": {"status": "allocated", "ownedBy":server["name"]} })
     return json.loads(dumps(wf))
 
 @api_app.post("/exec/executionOutput")
 async def executionOutput(q: Dict[Any, Any]):
-    print(q)
-    query = {"_id": ObjectId(q["workflowId"]["$oid"]), "workflow.wf._id.$oid": q["taskId"]}
-    update = {"$set": {"workflow.wf.$.status": "complete", "workflow.wf.$.result": q["result"]}}
+    query = {"_id": ObjectId(q["workflowId"]["$oid"])}
+    update = {"$set": {"workflow.wf."+str(q["index"])+".status": "complete", "workflow.wf."+str(q["index"])+".result": q["result"]}}
+    print(update)
     db["executions"].update_one(query, update)
-
 
 @api_app.get("/exec/downloadZip/{pointerid}")
 async def downloadZip(pointerid: str):
@@ -117,6 +116,10 @@ async def listAllExecutions():
 async def listExecutionSteps(id:str):
     d = db["executions"].find_one({"_id": ObjectId(id) })
     return json.loads(dumps(d))
+
+@api_app.post("/exec/completeExecution/{id}")
+async def completeExecution(id:str):
+    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "complete"} })
 
 @api_app.get("/hello")
 async def hello():

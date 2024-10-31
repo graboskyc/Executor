@@ -38,7 +38,12 @@
                     <h1>Executions</h1>
                     <ul>
                         <template x-for="e in executions">
-                            <li x-text="e.workflow.name" x-on:click="loadSteps(e._id)"></li>
+                            <li x-on:click="loadSteps(e._id)">
+                                <span x-text="e.workflow.name"></span>
+                                <span x-show="e.status == 'queued'" class="material-symbols-outlined">hourglass_top</span>
+                                <span x-show="e.status == 'allocated'" class="material-symbols-outlined">sprint</span>
+                                <span x-show="e.status == 'complete'" class="material-symbols-outlined">done_all</span>
+                            </li>
                         </template>
                 </article>
 
@@ -46,14 +51,18 @@
                     <h1>Steps</h1>
                     <ul>
                         <template x-for="s in steps">
-                            <li x-text="s.title" x-on:click="selectedStep = s"></li>
+                            <li x-on:click="selectedStep = s">
+                                <span x-text="s.title"></span>
+                                <span x-show="!s.result" class="material-symbols-outlined">hourglass_top</span>
+                                <span x-show="s.result.length != 0" class="material-symbols-outlined">task_alt</span>
+                            </li>
                         </template>
                     </ul>
                 </article>
 
                 <article x-show="selectedStep != null">
                     <h1>Execution</h1>
-                    <code x-text="selectedStep.result" style="width: 100%; min-height: 90%;"></code>
+                    <code x-text="selectedStep.result" style="width: 100%; min-height: 90%; white-space: pre;"></code>
                 </article>
             </article>
     </body>
