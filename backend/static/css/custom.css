@@ -57,3 +57,9 @@ label {
 .fl_endblocks, .tb_li, .fl_straightline {
     list-style-type: none !important;
 }
+
+.fl_straightline {
+    height: 20px;
+    width: 5px;
+    background-color: #000000;
+}
