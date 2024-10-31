@@ -12,6 +12,7 @@ import requests
 from typing import Dict, Any
 from fastapi.middleware.cors import CORSMiddleware
 import gridfs
+from fastapi.responses import StreamingResponse
 
 api_app = FastAPI(title="api-app")
 app = FastAPI(title="spa-app")
@@ -59,7 +60,7 @@ async def saveTemplate(id:str, file: UploadFile = File(), template: str = Form()
 
 @api_app.get("/crud/newWorkflow")
 async def new():
-    obj = {"name":"New Subscription", "wf":[] }
+    obj = {"name":"New Workflow", "wf":[] }
     id = db["workflows"].insert_one(obj).inserted_id
     obj["_id"] = id
     return json.loads(dumps(obj))
@@ -85,6 +86,27 @@ async def newTemplate(id:str, d: Dict[Any, Any]):
     w = db["workflows"].find_one({"_id": ObjectId(id) })
     newObj["workflow"] = w
     db["executions"].insert_one(newObj)
+
+@api_app.post("/exec/getNextExecution")
+async def getNextExecution(server: Dict[Any, Any]):
+    wf = db["executions"].find_one({"status": "queued" })
+    print(wf)
+    #db["executions"].update_one({"_id": wf["_id"] }, {"$set": {"status": "allocated", "ownedBy":server["name"]} })
+    return json.loads(dumps(wf))
+
+@api_app.post("/exec/executionOutput")
+async def executionOutput(q: Dict[Any, Any]):
+    print(q)
+    query = {"_id": ObjectId(q["workflowId"]["$oid"]), "workflow.wf._id.$oid": q["taskId"]}
+    update = {"$set": {"workflow.wf.$.status": "complete", "workflow.wf.$.result": q["result"]}}
+    db["executions"].update_one(query, update)
+
+
+@api_app.get("/exec/downloadZip/{pointerid}")
+async def downloadZip(pointerid: str):
+    fs = gridfs.GridFS(db)
+    file = fs.get(ObjectId(pointerid))
+    return StreamingResponse(file, media_type="application/zip")
 
 @api_app.get("/hello")
 async def hello():
