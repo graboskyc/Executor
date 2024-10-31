@@ -22,6 +22,20 @@ function init() {
             });
         },
 
+        async exeWorkflow() {
+            await this.saveWorkflow();
+            console.log('Executing');
+            var id = this.getQueryVariable("_id");
+            await fetch('/api/exec/enqueueWorkflow/'+id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+            alert("Enqueued!");
+        },
+
         async appendWf(t) {
             this.workflow.wf.push(t);
         },

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Response
 import pymongo
-import datetime
+from datetime import datetime
+from datetime import timezone
 from bson.json_util import dumps
 from bson.timestamp import Timestamp
 from bson.objectid import ObjectId
@@ -62,6 +63,18 @@ async def getWorkflowById(id:str):
 async def saveWorkflow(id:str, d: Dict[Any,Any]):
     d.pop("_id")
     db["workflows"].update_one({"_id": ObjectId(id) }, {"$set": d })
+
+@api_app.post("/exec/enqueueWorkflow/{id}")
+async def newTemplate(id:str, d: Dict[Any, Any]):
+    newObj ={}
+    newObj["payload"] = d
+    newObj["workflowId"] = id
+    newObj["status"] = "queued"
+    newObj["created"] = datetime.now(timezone.utc)
+    newObj["modified"] = datetime.now(timezone.utc)
+    w = db["workflows"].find_one({"_id": ObjectId(id) })
+    newObj["workflow"] = w
+    db["executions"].insert_one(newObj)
 
 @api_app.get("/hello")
 async def hello():
