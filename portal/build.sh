@@ -2,7 +2,7 @@
 
 echo
 echo "+================================"
-echo "| START: Executor"
+echo "| START: Executor Portal"
 echo "+================================"
 echo
 
@@ -31,7 +31,7 @@ if [ $EXITCODE -eq 0 ]
 
     echo
     echo "+================================"
-    echo "| END:  Executor"
+    echo "| END:  Executor Portal"
     echo "+================================"
     echo
 else
