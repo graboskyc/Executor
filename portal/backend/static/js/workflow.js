@@ -2,6 +2,9 @@ function init() {
     return {
         workflow: {},
         allTemplates: [],
+        openModal: false,
+        selectedTemplate: {},
+        oldSelectedTemplate:{},
        
         async loadList() {
             console.log('Loading List');
@@ -20,6 +23,7 @@ function init() {
                 },
                 body: JSON.stringify(this.workflow)
             });
+            alert("Saved!");
         },
 
         async exeWorkflow() {
@@ -38,6 +42,23 @@ function init() {
 
         async appendWf(t) {
             this.workflow.wf.push(t);
+        },
+
+        async editTask(t) {
+            this.selectedTemplate = t;
+            this.oldSelectedTemplate = t; 
+            this.openModal = true;
+        },
+
+        async saveTask() {
+            this.workflow.wf.forEach(element => {
+                if(element == this.oldSelectedTemplate) {
+                    element = this.selectedTemplate;
+                }
+            });
+            this.selectedTemplate = {};
+            this.oldSelectedTemplate = {};
+            this.openModal = false;
         },
 
         getQueryVariable(variable) {

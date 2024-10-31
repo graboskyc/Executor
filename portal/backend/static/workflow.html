@@ -40,7 +40,7 @@
                 <div class="grid">
                     <article>
                         <h2>Toolbox</h2>
-                        <ul :aria-busy="allTemplates.length === 0 ? 'true':'false'">
+                        <ul>
                             <template x-for="t in allTemplates">
                                 <li class="tb_li" x-on:click="appendWf(t)">
                                     <template-box :title="t.title" :icon="t.icon"></template-box>
@@ -56,7 +56,7 @@
                         <input type="text" placeholder="title" name="title" x-model="workflow.name">
 
                         <h2>Flow</h2>
-                        <div :aria-busy="workflow.wf.length === 0 ? 'true':'false'" style="margin: 10px;">
+                        <div>
                             <div class="fl_endblocks">START</div>
                             <div class="fl_straightline">&nbsp;</div>
                             <template x-for="t in workflow.wf">
@@ -65,7 +65,7 @@
                                         <div class="tb_round">
                                             <template-box :title="t.title" :icon="t.icon"></template-box>
                                         </div>
-                                        <button x-on:click="workflow.wf = workflow.wf.filter((c) => c != t)" class="btn-delete"><span class="material-symbols-outlined">delete</span></button>
+                                        <button x-on:click="editTask(t)" class="secondary"><span class="material-symbols-outlined">edit</span></button>
                                     </div>                                
                                     <div class="fl_straightline" :title="t.title" x-text="t.tile">&nbsp;</div>
                                 </div>
@@ -78,5 +78,40 @@
                     </article>
                 </div>
             </article>
+
+            <dialog x-show="openModal" open>
+                <article>
+                    <header>
+                        Edit 
+                        <button aria-label="Close" rel="prev" x-on:click="openModal = false"></button>
+                    </header>
+                    <h2 x-text="selectedTemplate.title"></h2>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Friendly Name</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="a in selectedTemplate.arguments">
+                                <tr>
+                                    <td x-text="a.key"></td>
+                                    <td x-text="a.friendlyName"></td>
+                                    <td><input type="text" placeholder="key" x-model="a.value" /></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                    
+                    <button class="secondary" x-on:click="openModal = false"><span class="material-symbols-outlined">close</span></button>
+                    <button x-on:click="workflow.wf = workflow.wf.filter((c) => c != t)" class="btn-delete"><span class="material-symbols-outlined">delete</span></button>
+                    <button x-on:click="saveTask()"><span class="material-symbols-outlined">save</span></button>
+                </article>
+            </dialog>
+
+        </div>
     </body>
 </html>
