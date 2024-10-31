@@ -56,20 +56,22 @@
                         <input type="text" placeholder="title" name="title" x-model="workflow.name">
 
                         <h2>Flow</h2>
-                        <ul :aria-busy="workflow.wf.length === 0 ? 'true':'false'">
-                            <li class="fl_endblocks">START</li>
-                            <li class="fl_straightline">&nbsp;</li>
+                        <div :aria-busy="workflow.wf.length === 0 ? 'true':'false'" style="margin: 10px;">
+                            <div class="fl_endblocks">START</div>
+                            <div class="fl_straightline">&nbsp;</div>
                             <template x-for="t in workflow.wf">
-                                <div class="grid">
-                                    <li class="tb_li">
-                                        <template-box :title="t.title" :icon="t.icon"></template-box>
-                                    </li>
-                                    <button x-on:click="workflow.wf = workflow.wf.filter((c) => c != t)" class="btn-delete"><span class="material-symbols-outlined">delete</span></button>
-                                </div>                                
-                                <li class="fl_straightline" :title="t.title">&nbsp;</li>
+                                <div>
+                                    <div role="group" style="padding: 0px; margin: 0px; box-shadow: rgb(0, 0, 0) 0px 5px 0px;">
+                                        <div class="tb_round">
+                                            <template-box :title="t.title" :icon="t.icon"></template-box>
+                                        </div>
+                                        <button x-on:click="workflow.wf = workflow.wf.filter((c) => c != t)" class="btn-delete"><span class="material-symbols-outlined">delete</span></button>
+                                    </div>                                
+                                    <div class="fl_straightline" :title="t.title" x-text="t.tile">&nbsp;</div>
+                                </div>
                             </template>
                             <li class="fl_endblocks">END</li>
-                        </ul>
+                        </div>
                         
                         <button x-on:click="saveWorkflow">Save Workflow</button>
                         <button x-on:click="exeWorkflow" class="secondary">Execute Workflow</button>
