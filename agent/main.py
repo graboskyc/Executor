@@ -20,9 +20,14 @@ while True:
 
     for wf in resObj['workflow']["wf"]:
         print("--------------------BEGIN WORKFLOW----------------------")
+        execId = resObj["_id"]["$oid"]
         try:
+            stepId = wf["_id"]["$oid"]
             templateFileId = wf["gridfspointer"]["$oid"]
-            zipfileName = templateFileId+".zip"    
+            zipfileName = templateFileId+".zip"
+            response = requests.get(f"{server}/api/exec/getLastStepOutput/"+execId+"/"+stepId)
+            lastStepOutput = json.loads(response.text)
+
             os.chdir("/usr/src/app")
             if not os.path.exists(templateFileId):
                 print("Downloading template file")
@@ -45,6 +50,7 @@ while True:
 
             print("Running workflow")
             os.environ["EXECUTORTASK"] = json.dumps(wf)
+            os.environ["EXECUTORLASTOUTPUT"] = json.dumps(lastStepOutput)
             if wf["engine"] == "python3":
                 result = subprocess.check_output("./venv/bin/python3 __init__.py", shell=True, text=True)
             elif wf["engine"] == "nodejs":
@@ -57,7 +63,7 @@ while True:
         except Exception as e:
             print("Error")
             print(e)
-            response = requests.post(f"{server}/api/exec/errorExecution/"+resObj["_id"]["$oid"], json = agentDetails)
+            response = requests.post(f"{server}/api/exec/errorExecution/"+execId, json = agentDetails)
             postObj = {"result":str(e), "status":"error", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
             response = requests.post(f"{server}/api/exec/executionOutput", json = postObj)
         print("--------------------END WORKFLOW----------------------")
@@ -65,7 +71,7 @@ while True:
 
     if index > 0:
         print("All workflows complete")
-        response = requests.post(f"{server}/api/exec/completeExecution/"+resObj["_id"]["$oid"], json = agentDetails)
+        response = requests.post(f"{server}/api/exec/completeExecution/"+execId, json = agentDetails)
 
     print("Sleeping")
     time.sleep(60)

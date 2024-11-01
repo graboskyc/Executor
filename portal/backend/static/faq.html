@@ -86,7 +86,7 @@
 
                 <details>
                     <summary role="button">Is there any context provided to the script?</summary>
-                    <p>Yes, an env variable called <code>EXECUTOR</code> is included. You should <code>json.loads(os.environ["EXECUTOR"])</code> to gain access to the format below:</p>
+                    <p>Yes, an env variable called <code>EXECUTOR</code> is included. You should <code>json.loads(os.environ["EXECUTOR"])</code> to gain access to the format below which is the entire context for the execution:</p>
                     <p>
                         <code style="width: 100%; white-space: pre;">
                             {
@@ -110,6 +110,28 @@
                                         "gridfspointer":{"$oid":"6723ad020bf8e5e2f1f3dfab"}
                                     }
                                 ]
+                            }
+                        </code>
+                    </p>
+                    <p>Additionally, <code>EXECUTORTASK</code> has just the details for this step:</p>
+                    <p>
+                        <code>
+                            {
+                                "_id":{"$oid":"6723a5319df2474dd9315a89"},
+                                "title":"Hello World With Time and Env",
+                                "engine":"python3",
+                                "arguments":[{"key":"key","friendlyName":"value"}],
+                                "icon":"code",
+                                "gridfspointer":{"$oid":"6723ad020bf8e5e2f1f3dfab"}
+                            }
+                        </code>
+                    </p>
+                    <p>Lastly, <code>EXECUTORLASTOUTPUT</code> has the output of the previous command in case you are chaning them:</p>
+                    <p>
+                        <code>
+                            {
+                                "response": "big string of whatever was spit out of last command",
+                                "status": "complete"
                             }
                         </code>
                     </p>

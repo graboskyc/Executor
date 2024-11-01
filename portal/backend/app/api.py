@@ -133,6 +133,26 @@ async def completeExecution(id:str):
 async def errorExecution(id:str):
     db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "error"} })
 
+@api_app.get("/exec/getLastStepOutput/{execid}/{currStepId}")
+async def getLastStepOutput(execid:str, currStepId:str):
+    d = db["executions"].find_one({"_id": ObjectId(execid) })
+    retVal = {}
+    retVal["response"] = ""
+    retVal["status"] = "unknown"
+    i = 0
+    found = False
+    for wf in d["workflow"]["wf"]:
+        if wf["_id"]["$oid"] == currStepId:
+            found = True
+            break
+        i += 1
+    if found:
+        if i > 0:
+            retVal["response"] = d["workflow"]["wf"][i-1]["result"]
+            retVal["status"] = d["workflow"]["wf"][i-1]["status"]
+    
+    return json.loads(dumps(retVal))
+
 @api_app.get("/hello")
 async def hello():
     return {"message": "Hello World"}
