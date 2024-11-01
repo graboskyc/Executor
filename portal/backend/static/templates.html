@@ -96,10 +96,12 @@
                             </tfoot>
                         </table>
                         
-                        
-                        <button x-on:click="saveTemplate" x-show="'_id' in selectedTemplate">Save</button>
-                        <button x-on:click="saveTemplate" x-show="!('_id' in selectedTemplate)">Create</button>
-                        <button x-on:click="defaultList()" class="secondary">Reset</button>
+                        <div role="group">
+                            <button x-on:click="saveTemplate" x-show="'_id' in selectedTemplate">Save</button>
+                            <a x-show="'_id' in selectedTemplate" class="secondary" role="button" target="_blank" :href="'/api/exec/downloadZip/'+selectedTemplate.gridfspointer.$oid">Download Existing Script</a>
+                            <button x-on:click="saveTemplate" x-show="!('_id' in selectedTemplate)">Create</button>
+                            <button x-on:click="defaultList()" class="secondary">Reset</button>
+                        </div>
                     </div>
                 </div>
             </article>

@@ -111,6 +111,7 @@
                     </table>
                     
                     <button class="secondary" x-on:click="openModal = false"><span class="material-symbols-outlined">close</span></button>
+                    <a class="secondary" role="button" target="_blank" :href="'/api/exec/downloadZip/'+selectedTemplate.gridfspointer.$oid"><span class="material-symbols-outlined">download</span></a>
                     <button x-on:click="deleteTask()" class="btn-delete"><span class="material-symbols-outlined">delete</span></button>
                     <button x-on:click="saveTask()"><span class="material-symbols-outlined">save</span></button>
                 </article>
