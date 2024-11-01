@@ -1,0 +1,4 @@
+pymongo[srv,tls]
+dnspython
+requests
+bs4

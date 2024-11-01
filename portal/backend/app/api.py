@@ -129,6 +129,10 @@ async def listExecutionSteps(id:str):
 async def completeExecution(id:str):
     db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "complete"} })
 
+@api_app.post("/exec/errorExecution/{id}")
+async def errorExecution(id:str):
+    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "error"} })
+
 @api_app.get("/hello")
 async def hello():
     return {"message": "Hello World"}
