@@ -64,7 +64,7 @@
                                 <div>
                                     <div role="group" style="padding: 0px; margin: 0px; box-shadow: rgb(0, 0, 0) 0px 5px 0px;">
                                         <div class="tb_round">
-                                            <template-box :title="t.title" :icon="t.icon"></template-box>
+                                            <template-box :title="t.nickname || t.title" :icon="t.icon"></template-box>
                                         </div>
                                         <button x-on:click="editTask(t)" class="secondary"><span class="material-symbols-outlined">edit</span></button>
                                     </div>                                
@@ -90,6 +90,9 @@
                         <button aria-label="Close" rel="prev" x-on:click="openModal = false"></button>
                     </header>
                     <h2 x-text="selectedTemplate.title"></h2>
+
+                    <label for="nickname">Nickname</label>
+                    <input type="text" placeholder="nickname" name="nickname" x-model="selectedTemplate.nickname">
 
                     <table>
                         <thead>

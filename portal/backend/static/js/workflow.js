@@ -54,12 +54,9 @@ function init() {
         },
 
         async saveTask() {
-            this.workflow.wf.forEach(element => {
-                if(element == this.oldSelectedTemplate) {
-                    console.log("HIT!");
-                    element = this.selectedTemplate;
-                }
-            });
+            var i = this.workflow.wf.findIndex(x => x._id == this.selectedTemplate._id);
+            console.log(i);
+            this.workflow.wf[i] = this.selectedTemplate;
             this.selectedTemplate = {};
             this.oldSelectedTemplate = {};
             this.openModal = false;
@@ -82,12 +79,9 @@ function init() {
                 return;
             }
             this.latestTemplateVersion = await (await fetch('/api/crud/getTemplate/'+this.selectedTemplate._id.$oid)).json();
-            this.workflow.wf.forEach(element => {
-                if(element == this.oldSelectedTemplate) {
-                    console.log("HIT TO UPDATE!");
-                    element = this.latestTemplateVersion;
-                }
-            });            
+            var i = this.workflow.wf.findIndex(x => x._id == this.selectedTemplate._id);
+            console.log(i);
+            this.workflow.wf[i] = this.latestTemplateVersion;
             await this.saveWorkflow();
             this.selectedTemplate = {};
             this.oldSelectedTemplate = {};
