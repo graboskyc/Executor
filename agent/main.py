@@ -34,15 +34,19 @@ while True:
 
             os.chdir(templateFileId)
 
-            print("Making venv")
-            os.system("python3 -m venv venv")
-            os.system("./venv/bin/pip install -r requirements.txt")
+            if wf["engine"] == "python3":
+                print("Making venv")
+                os.system("python3 -m venv venv")
+                os.system("./venv/bin/pip install -r requirements.txt")
         else:
             print("Template already downloaded")
             os.chdir(templateFileId)
 
         print("Running workflow")
-        result = subprocess.check_output("./venv/bin/python3 __init__.py", shell=True, text=True)
+        if wf["engine"] == "python3":
+            result = subprocess.check_output("./venv/bin/python3 __init__.py", shell=True, text=True)
+        elif wf["engine"] == "nodejs":
+            result = subprocess.check_output("node index.js", shell=True, text=True)
 
         print("Saving result")
         postObj = {"result":result, "status":"complete", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}

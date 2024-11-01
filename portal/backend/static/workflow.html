@@ -107,7 +107,7 @@
                     </table>
                     
                     <button class="secondary" x-on:click="openModal = false"><span class="material-symbols-outlined">close</span></button>
-                    <button x-on:click="workflow.wf = workflow.wf.filter((c) => c != t)" class="btn-delete"><span class="material-symbols-outlined">delete</span></button>
+                    <button x-on:click="workflow.wf = workflow.wf.filter((c) => c != selectedTemplate)" class="btn-delete"><span class="material-symbols-outlined">delete</span></button>
                     <button x-on:click="saveTask()"><span class="material-symbols-outlined">save</span></button>
                 </article>
             </dialog>

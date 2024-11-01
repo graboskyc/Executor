@@ -61,6 +61,13 @@ function init() {
             this.openModal = false;
         },
 
+        async deleteTask() {
+            this.workflow.wf = this.workflow.wf.filter((c) => c != this.selectedTemplate);
+            this.selectedTemplate = {};
+            this.oldSelectedTemplate = {};
+            this.openModal = false;
+        },
+
         getQueryVariable(variable) {
             var query = window.location.search.substring(1);
             var vars = query.split("&");
