@@ -68,7 +68,7 @@
                 <details>
                     <summary role="button">How do I make a script?</summary>
                     <p>Scripts are called Templates</p>
-                    <p>There is a sample in the sample plugin directory on our <a href="https://github.com/graboskyc/Executor/tree/main/sample_plugin" target="_blank">github</a></p>
+                    <p>There is a sample in the sample plugin directory on our <a href="https://github.com/graboskyc/Executor/tree/main/plugins/helloworld_python3" target="_blank">github</a></p>
                     <p>In short, the python file must be called <code>__init__.py</code> and support Python3 syntax. If any additional packages are required, put them in the <code>requirements.txt</code> file. Everything will be run in an venv so make sure every package you need is included</p>
                     <p>For node, the current supported version is nodejs 18. It does not yet install packages so all packages must be bundled. The system will unzip and execute index.js.</p>
                 </details>
@@ -77,6 +77,7 @@
                     <summary role="button">If I change a Template, does it get reflected in all Workflows</summary>
                     <p>No, modification to Templates do not cascade to Workflows by design.</p>
                     <p>When a Template is added to a Workflow, it gets duplicated into it so it will run in that version state forever without conflict.</p>
+                    <p>If you want to pull the latest version, on the <span class="material-symbols-outlined">edit</span> screen of a Task within a Workflow, you can <span class="material-symbols-outlined">update</span> to pull the latest version from the Toolbox</p>
                 </details>
 
                 <details>
