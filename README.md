@@ -14,14 +14,28 @@ This is a system that will allow chaning together multiple scripts in to executi
 ## For advanced usage
 * See the FAQ page within the running portal
 
+## Terminology
+* **Template** - The reusable building block Tasks comprised of a name, a specified engine, an icon, and an uploaded zip file. It may optionally have additional input parameters that can be specified as user input when put into a Workflow
+* **Task** - When a Template is put into a Workflow, it becomes an instantiation of a Template, and thus a Task. It inherits all of the details of the Template, but then when placed into a Workflow it can have its argument values configured
+* **Workflow** - A saved collection of Tasks in an order
+* **Execution** - A specific instantiation of a Workflow where the entire Workflow is run top to bottom
+
 ## Screenshots
 
+### Homepage
 ![](screenshots/ss01.png)
 
+### Managing Task Templates
 ![](screenshots/ss02.png)
 
+### Managing Workflows (a series of implementations of Tasks)
 ![](screenshots/ss03.png)
 
+### Editing a Workflow
 ![](screenshots/ss05.png)
 
+### Modifying context of a Task
+![](screenshots/ss06.png)
+
+### Viewing a Workflow's and Task's Execution
 ![](screenshots/ss04.png)
