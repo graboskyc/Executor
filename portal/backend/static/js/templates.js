@@ -6,7 +6,7 @@ function init() {
         file: null,
 
         defaultList() {
-            this.selectedTemplate= {title:"",engine:"python3",arguments:[], icon:"code"};
+            this.selectedTemplate= {title:"",engine:"python3",arguments:[], icon:"code", revision:1};
             this.file = null;
         },
 
@@ -18,8 +18,11 @@ function init() {
 
         async saveTemplate() {
             console.log(this.selectedTemplate);
+            this.selectedTemplate.revision = this.selectedTemplate.revision + 1;
             var data = new FormData()
-            data.append('file', this.file[0])
+            if(this.file != null){
+                data.append('file', this.file[0])
+            }
             data.append('template', JSON.stringify(this.selectedTemplate))
             if("_id" in this.selectedTemplate) {
                 console.log('Saving Template');

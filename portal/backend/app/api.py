@@ -49,14 +49,19 @@ async def newTemplate(file: UploadFile = File(), template: str = Form()):
     db["templates"].insert_one(tobj)
 
 @api_app.put("/crud/saveTemplate/{id}")
-async def saveTemplate(id:str, file: UploadFile = File(), template: str = Form()):
+async def saveTemplate(id:str, file: UploadFile = None, template: str = Form()):
     d = json.loads(template)
     d.pop("_id")
     db["templates"].update_one({"_id": ObjectId(id) }, {"$set": d })
-    if file:
+    if file != None:
         contents = file.file.read()
         pointer = gridfs.GridFS(db).put(contents, filename=d["title"])
         db["templates"].update_one({"_id": ObjectId(id) }, {"$set": {"gridfspointer": pointer} })
+
+@api_app.get("/crud/getTemplate/{id}")
+async def getTemplate(id:str):
+    d = db["templates"].find_one({"_id": ObjectId(id) })
+    return json.loads(dumps(d))
 
 @api_app.get("/crud/newWorkflow")
 async def new():
@@ -76,7 +81,7 @@ async def saveWorkflow(id:str, d: Dict[Any,Any]):
     db["workflows"].update_one({"_id": ObjectId(id) }, {"$set": d })
 
 @api_app.post("/exec/enqueueWorkflow/{id}")
-async def newTemplate(id:str, d: Dict[Any, Any]):
+async def enqueueWorkflow(id:str, d: Dict[Any, Any]):
     newObj ={}
     newObj["payload"] = d
     newObj["workflowId"] = id

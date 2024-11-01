@@ -5,6 +5,8 @@ function init() {
         openModal: false,
         selectedTemplate: {},
         oldSelectedTemplate:{},
+        showToolbox:true,
+        latestTemplateVersion:{},
        
         async loadList() {
             console.log('Loading List');
@@ -46,13 +48,15 @@ function init() {
 
         async editTask(t) {
             this.selectedTemplate = t;
-            this.oldSelectedTemplate = t; 
+            this.oldSelectedTemplate = t;
+            this.latestTemplateVersion = await (await fetch('/api/crud/getTemplate/'+t._id.$oid)).json();
             this.openModal = true;
         },
 
         async saveTask() {
             this.workflow.wf.forEach(element => {
                 if(element == this.oldSelectedTemplate) {
+                    console.log("HIT!");
                     element = this.selectedTemplate;
                 }
             });
@@ -62,9 +66,32 @@ function init() {
         },
 
         async deleteTask() {
+            let result = confirm("Are you sure you want to delete this task?");
+            if (!result) {
+                return;
+            }
             this.workflow.wf = this.workflow.wf.filter((c) => c != this.selectedTemplate);
             this.selectedTemplate = {};
             this.oldSelectedTemplate = {};
+            this.openModal = false;
+        },
+
+        async updateTask() {
+            let result = confirm("Are you sure you want to update this task to the latest version? This cannot be reverted.");
+            if (!result) {
+                return;
+            }
+            this.latestTemplateVersion = await (await fetch('/api/crud/getTemplate/'+this.selectedTemplate._id.$oid)).json();
+            this.workflow.wf.forEach(element => {
+                if(element == this.oldSelectedTemplate) {
+                    console.log("HIT TO UPDATE!");
+                    element = this.latestTemplateVersion;
+                }
+            });            
+            await this.saveWorkflow();
+            this.selectedTemplate = {};
+            this.oldSelectedTemplate = {};
+            this.latestTemplateVersion = {};
             this.openModal = false;
         },
 

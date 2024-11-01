@@ -38,8 +38,8 @@
 
             <article>
                 <div class="grid">
-                    <article>
-                        <h2>Toolbox</h2>
+                    <article x-show="showToolbox">
+                        <h2>Toolbox <span class="material-symbols-outlined" x-on:click="showToolbox = false" x-show="showToolbox">hide_source</span></h2>
                         <ul>
                             <template x-for="t in allTemplates">
                                 <li class="tb_li" x-on:click="appendWf(t)">
@@ -55,7 +55,7 @@
                         <label for="title">Name</label>
                         <input type="text" placeholder="title" name="title" x-model="workflow.name">
 
-                        <h2>Flow</h2>
+                        <h2>Flow <span class="material-symbols-outlined" x-on:click="showToolbox = true" x-show="!showToolbox">add_circle</span></h2>
                         <div style="margin-bottom: 20px;">
                             <div class="fl_endblocks">START</div>
                             <div class="fl_straightline">&nbsp;</div>
@@ -112,6 +112,7 @@
                     
                     <button class="secondary" x-on:click="openModal = false"><span class="material-symbols-outlined">close</span></button>
                     <a class="secondary" role="button" target="_blank" :href="'/api/exec/downloadZip/'+selectedTemplate.gridfspointer.$oid"><span class="material-symbols-outlined">download</span></a>
+                    <button x-on:click="updateTask()" x-show="selectedTemplate.revision != latestTemplateVersion.revision" class="btn-delete"><span class="material-symbols-outlined">update</span></button>
                     <button x-on:click="deleteTask()" class="btn-delete"><span class="material-symbols-outlined">delete</span></button>
                     <button x-on:click="saveTask()"><span class="material-symbols-outlined">save</span></button>
                 </article>
