@@ -61,7 +61,17 @@ label {
 .fl_straightline {
     height: 50px;
     background-color: rgb(0, 30, 43);
-    width: 24px;
+    width: 12px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fl_triangledown {
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 20px solid rgb(0, 30, 43);
     margin-left: auto;
     margin-right: auto;
 }

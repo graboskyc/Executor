@@ -56,9 +56,10 @@
                         <input type="text" placeholder="title" name="title" x-model="workflow.name">
 
                         <h2>Flow</h2>
-                        <div>
+                        <div style="margin-bottom: 20px;">
                             <div class="fl_endblocks">START</div>
                             <div class="fl_straightline">&nbsp;</div>
+                            <div class="fl_triangledown">&nbsp;</div>
                             <template x-for="t in workflow.wf">
                                 <div>
                                     <div role="group" style="padding: 0px; margin: 0px; box-shadow: rgb(0, 0, 0) 0px 5px 0px;">
@@ -67,14 +68,17 @@
                                         </div>
                                         <button x-on:click="editTask(t)" class="secondary"><span class="material-symbols-outlined">edit</span></button>
                                     </div>                                
-                                    <div class="fl_straightline" :title="t.title" x-text="t.tile">&nbsp;</div>
+                                    <div class="fl_straightline">&nbsp;</div>
+                                    <div class="fl_triangledown">&nbsp;</div>
                                 </div>
                             </template>
                             <li class="fl_endblocks">END</li>
                         </div>
                         
-                        <button x-on:click="saveWorkflow">Save Workflow</button>
-                        <button x-on:click="exeWorkflow" class="secondary">Execute Workflow</button>
+                        <div role="group">
+                            <button x-on:click="saveWorkflow">Save Workflow</button>
+                            <button x-on:click="exeWorkflow" class="secondary">Execute Workflow</button>
+                        </div>
                     </article>
                 </div>
             </article>
