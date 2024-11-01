@@ -94,7 +94,9 @@
                     <label for="nickname">Nickname</label>
                     <input type="text" placeholder="nickname" name="nickname" x-model="selectedTemplate.nickname">
 
-                    <table>
+                    <p x-show="selectedTemplate.link"><a :href="selectedTemplate.link" target="_blank">Click here to read documentation</a></p>
+
+                    <table x-show="selectedTemplate.arguments.length > 0">
                         <thead>
                             <tr>
                                 <th>Key</th>

@@ -58,8 +58,14 @@
                         <label for="rev">Revision</label>
                         <input type="text" placeholder="rev" name="rev" x-model="selectedTemplate.revision" readonly>
 
-                        <label for="icon">Material Icon</label>
+                        <label for="icon">
+                            <span>Material Icon</span>
+                            <a href="https://fonts.google.com/icons" target="_blank"><span class="material-symbols-outlined">link</span></a>
+                        </label>
                         <input type="text" placeholder="code" name="icon" x-model="selectedTemplate.icon">
+
+                        <label for="link">External Link</label>
+                        <input type="text" placeholder="Link for user to read" name="link" x-model="selectedTemplate.link">
 
                         <label for="file">Zip File</label>
                         <span x-text="file ? file.name : 'Choose zip file...'"></span>
