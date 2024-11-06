@@ -24,4 +24,8 @@ response = client.embeddings.create(
   input="search_document: " + lastOutput["response"],
 )
 
-print(response)
+retVal = {}
+retVal["embedding"] = response.data[0].embedding
+retVal["text"] = lastOutput["response"]
+
+print(json.dumps(retVal))
