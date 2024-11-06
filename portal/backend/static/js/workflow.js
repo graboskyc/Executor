@@ -7,6 +7,7 @@ function init() {
         oldSelectedTemplate:{},
         showToolbox:true,
         latestTemplateVersion:{},
+        showPassword: false,
        
         async loadList() {
             console.log('Loading List');
@@ -87,6 +88,10 @@ function init() {
             this.oldSelectedTemplate = {};
             this.latestTemplateVersion = {};
             this.openModal = false;
+        },
+
+        async togglePassword() {
+            this.showPassword = !this.showPassword;
         },
 
         getQueryVariable(variable) {

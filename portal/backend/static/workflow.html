@@ -101,7 +101,11 @@
                             <tr>
                                 <th>Key</th>
                                 <th>Friendly Name</th>
-                                <th>Value</th>
+                                <th>
+                                    Value
+                                    <span x-show="!showPassword" x-on:click="togglePassword" class="material-symbols-outlined">visibility</span>
+                                    <span x-show="showPassword" x-on:click="togglePassword" class="material-symbols-outlined">visibility_off</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,7 +113,7 @@
                                 <tr>
                                     <td x-text="a.key"></td>
                                     <td x-text="a.friendlyName"></td>
-                                    <td><input type="text" placeholder="key" x-model="a.value" /></td>
+                                    <td><input :type="showPassword ? 'text' : 'password'" type="password" placeholder="key" x-model="a.value" /></td>
                                 </tr>
                             </template>
                         </tbody>
