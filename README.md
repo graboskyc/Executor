@@ -90,3 +90,4 @@ This is a system that will allow chaning together multiple scripts in to executi
         }
     </code>
 </p>
+<p>If all else fails, <code>EXECUTORPORTAL</code> has the IP address or hostname of the Portal. So you can make API calls directly.</p>

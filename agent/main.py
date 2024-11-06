@@ -17,6 +17,7 @@ while True:
     index = 0
 
     os.environ["EXECUTOR"] = response.text
+    os.environ["EXECUTORPORTAL"] = server
 
     for wf in resObj['workflow']["wf"]:
         print("--------------------BEGIN WORKFLOW----------------------")
