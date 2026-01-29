@@ -26,7 +26,14 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-client = pymongo.MongoClient(os.environ["MDBCONNSTR"].strip())
+# check if SPECUIMDBCONNSTR is set, if so override MDBCONNSTR
+connstr = None
+if "SPECUIMDBCONNSTR" in os.environ:
+    connstr = os.environ["SPECUIMDBCONNSTR"].strip()
+else:
+    connstr = os.environ["MDBCONNSTR"].strip()
+
+client = pymongo.MongoClient(connstr)
 db = client["excutor"]
 
 @api_app.get("/crud/listAllTemplate")
