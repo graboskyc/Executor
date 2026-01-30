@@ -41,6 +41,9 @@
                         <template x-for="e in executions">
                             <li x-on:click="loadSteps(e._id)">
                                 <span x-text="e.workflow.name"></span>
+                                <span style="font-size: x-small;"> (</span>
+                                <span x-text="new Date(e.created.$date).toLocaleString()" style="font-size: x-small;"></span>
+                                <span style="font-size: x-small;">) </span>
                                 <span x-show="e.status == 'queued'" class="material-symbols-outlined">hourglass_top</span>
                                 <span x-show="e.status == 'allocated'" class="material-symbols-outlined">sprint</span>
                                 <span x-show="e.status == 'complete'" class="material-symbols-outlined">done_all</span>
@@ -51,7 +54,7 @@
                 </article>
 
                 <article x-show="steps != null">
-                    <h1>Steps <span class="material-symbols-outlined" x-on:click="loadSteps(selectedId)">frame_reload</span></h1>
+                    <h1>Steps (<span x-text="selectedId.$oid.slice(-5)"></span>) <span class="material-symbols-outlined" x-on:click="loadSteps(selectedId)">frame_reload</span></h1>
                     <ul style="max-height: 70vh; overflow-y: scroll;">
                         <template x-for="s in steps">
                             <li x-on:click="selectedStep = s">

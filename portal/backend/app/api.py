@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Response, File, UploadFile, Form
 import pymongo
-from datetime import datetime
+from datetime import datetime, timedelta
 from datetime import timezone
 from bson.json_util import dumps
 from bson.timestamp import Timestamp
@@ -125,7 +125,11 @@ async def downloadZip(pointerid: str):
 
 @api_app.get("/crud/listAllExecutions")
 async def listAllExecutions():
-    cursor = db["executions"].find({}).sort("_id", pymongo.DESCENDING)
+    two_days_ago = datetime.now(timezone.utc) - timedelta(days=2)
+    cursor = db["executions"].find(
+        {"created": {"$gte": two_days_ago}},
+        {"_id": 1, "workflow._id": 1, "workflow.name": 1, "created": 1, "status":1}
+    ).sort("_id", pymongo.DESCENDING)
     return json.loads(dumps(cursor))
 
 @api_app.get("/crud/listExecutionSteps/{id}")
