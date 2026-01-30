@@ -17,6 +17,7 @@ function init() {
             this.selectedId = executionId;
             var result = await (await fetch(`/api/crud/listExecutionSteps/${executionId["$oid"]}`)).json();
             this.steps = result.workflow.wf;
+            this.selectedStep = null;
         },
 
 

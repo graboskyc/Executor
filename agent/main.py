@@ -74,5 +74,5 @@ while True:
         print("All workflows complete")
         response = requests.post(f"{server}/api/exec/completeExecution/"+execId, json = agentDetails)
 
-    print("Sleeping")
-    time.sleep(60)
+    #print("Sleeping")
+    time.sleep(10)

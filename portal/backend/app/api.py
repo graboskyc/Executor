@@ -97,7 +97,8 @@ async def enqueueWorkflow(id:str, d: Dict[Any, Any]):
     newObj["modified"] = datetime.now(timezone.utc)
     w = db["workflows"].find_one({"_id": ObjectId(id) })
     newObj["workflow"] = w
-    db["executions"].insert_one(newObj)
+    d = db["executions"].insert_one(newObj)
+    return {"executionId": str(d.inserted_id) }
 
 @api_app.post("/exec/getNextExecution")
 async def getNextExecution(server: Dict[Any, Any]):
