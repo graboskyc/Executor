@@ -102,13 +102,30 @@ async def enqueueWorkflow(id:str, d: Dict[Any, Any]):
 
 @api_app.post("/exec/getNextExecution")
 async def getNextExecution(server: Dict[Any, Any]):
+    me = db["servers"].find_one({"_id": server["name"]})
+    waitUntil = 10
+    if me:
+        waitUntil = me["nextPoll"]
+        db["servers"].update_one({"_id": server["name"]}, {"$set": {"lastSeen": datetime.now(timezone.utc)}})
+    else:
+        db["servers"].insert_one({"_id": server["name"], "nextPoll":10, "lastSeen": datetime.now(timezone.utc)})
     wf = db["executions"].find_one({"status": "queued" })
-    print(wf)
+    #print(wf)
     if wf:
         db["executions"].update_one({"_id": wf["_id"] }, {"$set": {"status": "allocated", "ownedBy":server["name"]} })
+        wf["nextPoll"] = int(waitUntil)
         return json.loads(dumps(wf))
     else:
-        return {"workflow":{"wf":[]}}
+        return {"workflow":{"wf":[]}, "nextPoll": int(waitUntil)}
+
+@api_app.get("/exec/servers")
+async def listServers():
+    cursor = db["servers"].find({}).sort("lastSeen", pymongo.DESCENDING)
+    return json.loads(dumps(cursor))
+
+@api_app.put("/exec/updateServer")
+async def updateServer(server: Dict[Any, Any]):
+    db["servers"].update_one({"_id": server["name"]}, {"$set": {"nextPoll":server["nextPoll"]}})
 
 @api_app.post("/exec/executionOutput")
 async def executionOutput(q: Dict[Any, Any]):

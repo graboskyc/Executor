@@ -4,9 +4,11 @@ import json
 import zipfile
 import subprocess
 import time
+import socket
 
 server = os.environ["PORTAL"].strip()
-agentDetails = {"name":"Test Agent"}
+agentDetails = {"name":socket.gethostname()}
+nextPoll = 10
 
 while True:
 
@@ -18,6 +20,9 @@ while True:
 
     os.environ["EXECUTOR"] = response.text
     os.environ["EXECUTORPORTAL"] = server
+
+    if "nextPoll" in resObj:
+        nextPoll = int(resObj["nextPoll"])
 
     for wf in resObj['workflow']["wf"]:
         print("--------------------BEGIN WORKFLOW----------------------")
@@ -75,4 +80,4 @@ while True:
         response = requests.post(f"{server}/api/exec/completeExecution/"+execId, json = agentDetails)
 
     #print("Sleeping")
-    time.sleep(10)
+    time.sleep(nextPoll)

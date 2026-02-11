@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="color-scheme" content="light" />
+        
+        <title>Executor</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.lime.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+        
+        <script src="/js/servers.js"></script>
+        <link rel="stylesheet" href="/css/custom.css" />
+
+        <style>
+           
+        </style>
+
+    </head>
+    <body data-theme="light">
+        <div x-data="init()" x-init="loadList" data-theme="light" class="container">
+            <article>
+                <nav data-theme="dark">
+                    <ul>
+                        <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
+                    </ul>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="templates.html">Templates</a></li>
+                        <li><a href="workflows.html">Workflows</a></li>
+                    </ul>
+                </nav>
+            </article>
+
+            <article x-show="servers.length > 0">
+                <h1>Servers <span class="material-symbols-outlined" x-on:click="loadList">frame_reload</span></h1>
+                <table style="max-height: 70vh; overflow-y: scroll;">
+                    <thead>
+                        <tr>
+                            <th>Server</th>
+                            <th>Last Seen Date</th>
+                            <th>Next Poll</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="s in servers">
+                            <tr>
+                                <td><span x-text="s._id"></span></td>
+                                <td><span x-text="s.lastSeen.$date"></span> (<span x-text="minutesAgo(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                <td>
+                                    <input type="number" x-model="s.nextPoll" style="display: inline-block; width: 100px;" />
+                                    <button x-on:click="updateServer(s)" style="display: inline-block; margin-left: 10px;">Save</button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>                    
+                </table>
+            </article>
+        </div>
+    </body>
+</html>
