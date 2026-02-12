@@ -108,7 +108,10 @@ async def getNextExecution(server: Dict[Any, Any]):
         waitUntil = me["nextPoll"]
         db["servers"].update_one({"_id": server["name"]}, {"$set": {"lastSeen": datetime.now(timezone.utc)}})
     else:
-        db["servers"].insert_one({"_id": server["name"], "nextPoll":10, "lastSeen": datetime.now(timezone.utc)})
+        # set to a random number to avoid thundering herd
+        primes = [7, 11, 13, 17, 19, 23, 29, 31]
+        waitUntil = primes[hash(server["name"]) % len(primes)]
+        db["servers"].insert_one({"_id": server["name"], "nextPoll":waitUntil, "lastSeen": datetime.now(timezone.utc), "firstSeen": datetime.now(timezone.utc)})
     wf = db["executions"].find_one({"status": "queued" })
     #print(wf)
     if wf:
