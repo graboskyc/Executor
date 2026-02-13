@@ -167,10 +167,17 @@ async def downloadZip(pointerid: str):
     return StreamingResponse(file, media_type="application/zip")
 
 @api_app.get("/crud/listAllExecutions")
-async def listAllExecutions():
+async def listAllExecutions(errored_only: bool = False):
     two_days_ago = datetime.now(timezone.utc) - timedelta(days=2)
+    query = {"created": {"$gte": two_days_ago}}
+    if errored_only:
+        one_minute_ago = datetime.now(timezone.utc) - timedelta(minutes=1)
+        query["$or"] = [
+            {"status": "error"},
+            {"status": "queued", "created": {"$lt": one_minute_ago}}
+        ]
     cursor = db["executions"].find(
-        {"created": {"$gte": two_days_ago}},
+        query,
         {"_id": 1, "workflow._id": 1, "workflow.name": 1, "created": 1, "status":1}
     ).sort("_id", pymongo.DESCENDING)
     return json.loads(dumps(cursor))

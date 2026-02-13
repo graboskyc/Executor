@@ -40,6 +40,9 @@ This is a system that will allow chaning together multiple scripts in to executi
 ### Viewing a Workflow's and Task's Execution
 ![](screenshots/ss04.png)
 
+### List of Execution Servers
+![](screenshots/ss07.png)
+
 ## Context
 <p>Yes, an env variable called <code>EXECUTOR</code> is included. You should <code>json.loads(os.environ["EXECUTOR"])</code> to gain access to the format below which is the entire context for the execution:</p>
 <p>

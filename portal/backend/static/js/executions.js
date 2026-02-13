@@ -5,10 +5,15 @@ function init() {
         selectedStep: null,
         selectedId:null,
         charts: [],
+        showOnlyErrored: false,
        
         async loadList() {
             console.log('Loading List');
-            var result = await (await fetch('/api/crud/listAllExecutions')).json();
+            if(this.showOnlyErrored) {
+                var result = await (await fetch('/api/crud/listAllExecutions?errored_only=true')).json();
+            } else {
+                var result = await (await fetch('/api/crud/listAllExecutions')).json();
+            }
             console.log(result);
             this.executions= result;
             var chartsResult = await (await fetch('/api/crud/getPageConfig/executions')).json();
