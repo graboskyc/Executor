@@ -42,8 +42,23 @@ async def listAllTemplates():
     return json.loads(dumps(cursor))
 
 @api_app.get("/crud/listAllWorkflows")
-async def listAllTemplates():
-    cursor = db["workflows"].find({}).sort("_id", pymongo.DESCENDING)
+async def listAllWorkflows():
+    pipeline = [
+        {
+            '$project': {
+                '_id': 1, 
+                'name': 1, 
+                'stepCount': {
+                    '$size': '$wf'
+                }
+            }
+        }, {
+            '$sort': {
+                '_id': -1
+            }
+        }
+    ]
+    cursor = db["workflows"].aggregate(pipeline)
     return json.loads(dumps(cursor))
 
 @api_app.post("/crud/newTemplate")
@@ -72,7 +87,7 @@ async def getTemplate(id:str):
 
 @api_app.get("/crud/newWorkflow")
 async def new():
-    obj = {"name":"New Workflow", "wf":[] }
+    obj = {"name":"New Workflow", "wf":[], "modified": datetime.now(timezone.utc)}
     id = db["workflows"].insert_one(obj).inserted_id
     obj["_id"] = id
     return json.loads(dumps(obj))
@@ -85,7 +100,15 @@ async def getWorkflowById(id:str):
 @api_app.put("/crud/saveWorkflow/{id}")
 async def saveWorkflow(id:str, d: Dict[Any,Any]):
     d.pop("_id")
+    d["modified"] = datetime.now(timezone.utc)
     db["workflows"].update_one({"_id": ObjectId(id) }, {"$set": d })
+
+@api_app.get("/crud/getPageConfig/{page}")
+async def getPageConfig(page:str):
+    d = db["config"].find_one({"_id": page })
+    if not d:
+        return {"_id": page, "charts": [] }
+    return json.loads(dumps(d))
 
 @api_app.post("/exec/enqueueWorkflow/{id}")
 async def enqueueWorkflow(id:str, d: Dict[Any, Any]):

@@ -28,16 +28,23 @@
                     </ul>
                     <ul>
                         <li><a href="index.html">Home</a></li>
+                        <li><a href="servers.html">Servers</a></li>
                         <li><a href="templates.html">Templates</a></li>
                         <li><a href="workflows.html">Workflows</a></li>
                     </ul>
                 </nav>
             </article>
 
+            <article x-show="charts.length > 0">
+                <template x-for="url in charts">
+                    <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="100%" height="300" :src="url"></iframe>
+                </template>
+            </article>
+
             <article class="grid" style="min-height: 80vh;">
-                <article x-show="executions.length > 0">
+                <article>
                     <h1>Executions <span class="material-symbols-outlined" x-on:click="loadList">frame_reload</span></h1>
-                    <ul style="max-height: 70vh; overflow-y: scroll;">
+                    <ul style="max-height: 70vh; overflow-y: scroll;" x-show="executions.length > 0">
                         <template x-for="e in executions">
                             <li x-on:click="loadSteps(e._id)">
                                 <span x-text="e.workflow.name"></span>

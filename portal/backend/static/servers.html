@@ -34,13 +34,14 @@
                 </nav>
             </article>
 
-            <article x-show="servers.length > 0">
+            <article>
                 <h1>Servers <span class="material-symbols-outlined" x-on:click="loadList">frame_reload</span></h1>
-                <table style="max-height: 70vh; overflow-y: scroll;">
+                <table style="max-height: 70vh; overflow-y: scroll;"  x-show="servers.length > 0">
                     <thead>
                         <tr>
                             <th>Server</th>
-                            <th>Last Seen Date</th>
+                            <th>First Seen</th>
+                            <th>Last Seen</th>
                             <th>Next Poll</th>
                         </tr>
                     </thead>
@@ -48,6 +49,7 @@
                         <template x-for="s in servers">
                             <tr>
                                 <td><span x-text="s._id"></span></td>
+                                <td><span x-text="s.firstSeen.$date"></span> (<span x-text="minutesAgo(s.firstSeen.$date)" style="font-size: x-small;"></span>)</td>
                                 <td><span x-text="s.lastSeen.$date"></span> (<span x-text="minutesAgo(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
                                 <td>
                                     <input type="number" x-model="s.nextPoll" style="display: inline-block; width: 100px;" />

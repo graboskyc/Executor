@@ -37,13 +37,25 @@
 
             <article>
                 <h1>Your saved workflows</h1>
-                <ul :aria-busy="workflows.length === 0 ? 'true':'false'">
-                    <template x-for="w in workflows">
-                        <li>
-                            <a x-text="w.name" :href="'workflow.html?_id=' + w._id.$oid"></a>
-                        </li>
-                    </template>
-                </ul>
+
+                <table style="max-height: 70vh; overflow-y: scroll;"  :aria-busy="workflows.length === 0 ? 'true':'false'">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Steps</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="w in workflows">
+                            <tr>
+                                <td><span x-text="w.name"></span></td>
+                                <td><span x-text="w.stepCount"></span></td>
+                                <td><a role="button" :href="'workflow.html?_id=' + w._id.$oid">Edit</a></td>
+                            </tr>
+                        </template>
+                    </tbody>                    
+                </table>
 
                                             
                 <button x-on:click="newWorkflow">New Workflow</button>
