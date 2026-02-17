@@ -27,38 +27,80 @@
                         <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
                     </ul>
                     <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="templates.html">Templates</a></li>
-                        <li><a href="workflows.html">Workflows</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li>
+                            <details class="dropdown" data-theme="light">
+                                <summary>Admin</summary>
+                                <ul dir="rtl">
+                                    <li><a href="servers.html">Servers</a></li>
+                                    <li><a href="templates.html">Templates</a></li>
+                                    <li><a href="workflows.html">Workflows</a></li>
+                                    <li><a href="executions.html">Executions</a></li>
+                                </ul>
+                            </details>
+                        </li>
                     </ul>
                 </nav>
             </article>
 
             <article>
-                <h1>Servers <span class="material-symbols-outlined" x-on:click="loadList">frame_reload</span></h1>
-                <table style="max-height: 70vh; overflow-y: scroll;"  x-show="servers.length > 0">
-                    <thead>
-                        <tr>
-                            <th>Server</th>
-                            <th>First Seen</th>
-                            <th>Last Seen</th>
-                            <th>Next Poll</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template x-for="s in servers">
+                <details x-show="currentServers.length > 0" style="margin-top: 20px;" open>
+                    <summary role="button"><h1>Current Servers <span class="material-symbols-outlined" x-on:click="loadList">frame_reload</span></h1></summary>
+                    <table style="max-height: 70vh; overflow-y: scroll;"  x-show="currentServers.length > 0">
+                        <thead>
                             <tr>
-                                <td><span x-text="s._id"></span></td>
-                                <td><span x-text="s.firstSeen.$date"></span> (<span x-text="minutesAgo(s.firstSeen.$date)" style="font-size: x-small;"></span>)</td>
-                                <td><span x-text="s.lastSeen.$date"></span> (<span x-text="minutesAgo(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
-                                <td>
-                                    <input type="number" x-model="s.nextPoll" style="display: inline-block; width: 100px;" />
-                                    <button x-on:click="updateServer(s)" style="display: inline-block; margin-left: 10px;">Save</button>
-                                </td>
+                                <th>Server</th>
+                                <th>First Seen</th>
+                                <th>Last Seen</th>
+                                <th>Next Poll</th>
                             </tr>
-                        </template>
-                    </tbody>                    
-                </table>
+                        </thead>
+                        <tbody>
+                            <template x-for="s in currentServers">
+                                <tr>
+                                    <td><span x-text="s._id"></span></td>
+                                    <td><span x-text="s.firstSeen.$date"></span><br />(<span x-text="minutesAgo(s.firstSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                    <td><span x-text="s.lastSeen.$date"></span><br />(<span x-text="minutesAgo(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                    <td>
+                                        <input type="number" x-model="s.nextPoll" style="display: inline-block; width: 75px; font-size: small;" />
+                                        <button x-on:click="updateServer(s)" style="display: inline-block; margin-left: 10px;">
+                                            <span class="material-symbols-outlined">save</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>                    
+                    </table>
+                </details>
+
+                <details x-show="oldServers.length > 0" style="margin-top: 20px;">
+                    <summary role="button"><h1>Old Servers <span class="material-symbols-outlined" x-on:click="loadList">frame_reload</span></h1></summary>
+                    <table style="max-height: 70vh; overflow-y: scroll;"  x-show="oldServers.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Server</th>
+                                <th>First Seen</th>
+                                <th>Last Seen</th>
+                                <th>Next Poll</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="s in oldServers">
+                                <tr>
+                                    <td><span x-text="s._id"></span></td>
+                                    <td><span x-text="s.firstSeen.$date"></span><br />(<span x-text="minutesAgo(s.firstSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                    <td><span x-text="s.lastSeen.$date"></span><br />(<span x-text="minutesAgo(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                    <td>
+                                        <input type="number" x-model="s.nextPoll" style="display: inline-block; width: 75px; font-size: small;" />
+                                        <button x-on:click="updateServer(s)" style="display: inline-block; margin-left: 10px;">
+                                            <span class="material-symbols-outlined">save</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>                    
+                    </table>
+                </details>
             </article>
         </div>
     </body>

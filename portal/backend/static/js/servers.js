@@ -1,6 +1,8 @@
 function init() {
     return {
         servers: [],
+        currentServers: [],
+        oldServers: [],
        
         minutesAgo(dateStr) {
             const date = new Date(dateStr);
@@ -15,6 +17,21 @@ function init() {
             var result = await (await fetch('/api/exec/servers')).json();
             //console.log(result);
             this.servers= result;
+            // if the servrs have been seen in last 2 hours, it is current, otherwise it is old
+            this.currentServers = this.servers.filter(s => { 
+                const lastSeen = new Date(s.lastSeen.$date);
+                const now = new Date();
+                const diffMs = now - lastSeen;
+                const diffHours = diffMs / (1000 * 60 * 60);
+                return diffHours <= 2;
+            });
+            this.oldServers = this.servers.filter(s => { 
+                const lastSeen = new Date(s.lastSeen.$date);
+                const now = new Date();
+                const diffMs = now - lastSeen;
+                const diffHours = diffMs / (1000 * 60 * 60);
+                return diffHours > 2;
+            });
         }, 
 
         async updateServer(server) {

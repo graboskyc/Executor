@@ -58,14 +58,20 @@ while True:
             os.environ["EXECUTORTASK"] = json.dumps(wf)
             os.environ["EXECUTORLASTOUTPUT"] = json.dumps(lastStepOutput)
             if wf["engine"] == "python3":
-                result = subprocess.check_output("./venv/bin/python3 __init__.py", shell=True, text=True)
+                result = subprocess.check_output("./venv/bin/python3 __init__.py", shell=True, text=True, stderr=subprocess.STDOUT)
             elif wf["engine"] == "nodejs":
-                result = subprocess.check_output("node index.js", shell=True, text=True)
+                result = subprocess.check_output("node index.js", shell=True, text=True, stderr=subprocess.STDOUT)
 
             print("Saving result")
             postObj = {"result":result, "status":"complete", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
             response = requests.post(f"{server}/api/exec/executionOutput", json = postObj)
             print(postObj)
+        except subprocess.CalledProcessError as e:
+            print("Error in subprocess")
+            print(e.output)
+            response = requests.post(f"{server}/api/exec/errorExecution/"+execId, json = agentDetails)
+            postObj = {"result":e.output, "status":"error", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
+            response = requests.post(f"{server}/api/exec/executionOutput", json = postObj)
         except Exception as e:
             print("Error")
             print(e)
