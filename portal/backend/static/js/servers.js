@@ -3,6 +3,7 @@ function init() {
         servers: [],
         currentServers: [],
         oldServers: [],
+        serverStatus: [],
        
         minutesAgo(dateStr) {
             const date = new Date(dateStr);
@@ -12,9 +13,22 @@ function init() {
             return diffMins + ' min ago';
         },
 
+        getStatus(serverId) {
+            // format is {_id: serverId, count: count}
+            const status = this.serverStatus.find(s => s._id === serverId);
+            if (status) {
+                return status.count;
+            } else {
+                return 0;
+            }
+        },
+
         async loadList() {
             console.log('Loading List');
             var result = await (await fetch('/api/exec/servers')).json();
+            var statusResult = await (await fetch('/api/analytics/serverStats')).json();
+            this.serverStatus = statusResult;
+            console.log(this.serverStatus);
             //console.log(result);
             this.servers= result;
             // if the servrs have been seen in last 2 hours, it is current, otherwise it is old

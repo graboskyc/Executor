@@ -149,6 +149,21 @@ async def listServers():
     cursor = db["servers"].find({}).sort("lastSeen", pymongo.DESCENDING)
     return json.loads(dumps(cursor))
 
+@api_app.get("/analytics/serverStats")
+async def serverStats():
+    pipeline = [
+        {
+            '$group': {
+                '_id': '$ownedBy', 
+                'count': {
+                    '$sum': 1
+                }
+            }
+        }
+    ]
+    cursor = db["executions"].aggregate(pipeline)
+    return json.loads(dumps(cursor))
+
 @api_app.put("/exec/updateServer")
 async def updateServer(server: Dict[Any, Any]):
     db["servers"].update_one({"_id": server["name"]}, {"$set": {"nextPoll":server["nextPoll"]}})
