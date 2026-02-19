@@ -4,6 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="color-scheme" content="light" />
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
+        <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
         
         <title>Executor</title>
 
@@ -45,7 +50,7 @@
 
                 <details>
                     <summary role="button">What languages are supported</summary>
-                    <p>Python 3 right now only</p>
+                    <p>Python 3 right now is the only seriously implemented language. Node has a naive approach.</p>
                 </details>
 
                 <details>
@@ -66,11 +71,6 @@
                     <p>Yes</p>
                     <p>Make an HTTP POST to <code>/exec/enqueueWorkflow/{id}</code> where the ID is the workflow ID (which you can get from the UI URL bar when editing a workflow)</p>
                     <p>You can also include any other JSON object in the body and that will be passed into the scripts when they run later</p>
-                </details>
-
-                <details>
-                    <summary role="button">What are these material icons</summary>
-                    <p>See all icon names <a href="https://fonts.google.com/icons" target="_blank">here</a></p>
                 </details>
 
                 <details>

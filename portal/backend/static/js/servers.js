@@ -4,6 +4,7 @@ function init() {
         currentServers: [],
         oldServers: [],
         serverStatus: [],
+        charts: [],
        
         minutesAgo(dateStr) {
             const date = new Date(dateStr);
@@ -46,6 +47,8 @@ function init() {
                 const diffHours = diffMs / (1000 * 60 * 60);
                 return diffHours > 2;
             });
+            var chartsResult = await (await fetch('/api/crud/getPageConfig/servers')).json();
+            this.charts = chartsResult.charts;
         }, 
 
         async updateServer(server) {
