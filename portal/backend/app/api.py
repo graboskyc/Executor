@@ -128,6 +128,8 @@ async def retryExecution(id:str):
     # get current matching ID, copy it, set status to queued, and insert as new document
     d = db["executions"].find_one({"_id": ObjectId(id) })
     newObj = d.copy()
+    newObj["originalId"] = d["_id"]
+    newObj["isRetry"] = True
     newObj.pop("_id")
     newObj.pop("ownedBy")
     newObj["status"] = "queued"

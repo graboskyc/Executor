@@ -70,7 +70,7 @@
                     </h6>
                     <ul style="max-height: 70vh; overflow-y: scroll;" x-show="executions.length > 0">
                         <template x-for="e in executions">
-                            <li x-on:click="loadSteps(e._id)">
+                                <li x-on:click="loadSteps(e._id)" :id="'execution-' + e._id.$oid">
                                 <span x-text="e.workflow.name"></span>
                                 <span style="font-size: x-small;"> (</span>
                                 <span x-text="new Date(e.created.$date).toLocaleString()" style="font-size: x-small;"></span>
@@ -88,13 +88,14 @@
                     <h1>Steps (<span x-text="selectedId.$oid.slice(-5)"></span>) <span class="material-symbols-outlined" x-on:click="loadSteps(selectedId)">frame_reload</span></h1>
                     <ul style="max-height: 70vh; overflow-y: scroll;">
                         <template x-for="s in steps">
-                            <li x-on:click="selectedStep = s">
+                            <li x-on:click="setSelectedStep(s)" :id="'step-' + s._id.$oid">
                                 <span x-text="s.title"></span>
                                 <span x-show="!s.result" class="material-symbols-outlined">hourglass_top</span>
                                 <span x-show="s.result.length != 0" class="material-symbols-outlined">task_alt</span>
                             </li>
                         </template>
-                        <a target="_blank" :href="stepsDebug" role="button" x-show="stepsDebug" style="width: 100%;margin-top: 10px;">View In Splunk</a>
+                        <a target="_blank" :href="stepsDebug" role="button" x-show="stepsDebug" style="width: 100%;margin-top: 10px;" class="outline">View In Splunk</a>
+                        <button style="width: 100%;margin-top: 10px;" x-on:click="loadSteps(originalId)" class="outline secondary" x-show="originalId">View Original Execution</button>
                         <button style="width: 100%;margin-top: 10px;" x-on:click="retryExecution(selectedId.$oid)" class="secondary">Retry Execution</button>
                     </ul>
                 </article>
