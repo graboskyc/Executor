@@ -6,6 +6,7 @@ function init() {
         selectedId:null,
         charts: [],
         showOnlyErrored: false,
+        stepsDebug: null,
        
         async loadList() {
             console.log('Loading List');
@@ -25,10 +26,18 @@ function init() {
             this.selectedId = executionId;
             var result = await (await fetch(`/api/crud/listExecutionSteps/${executionId["$oid"]}`)).json();
             this.steps = result.workflow.wf;
+            var debugResult = await (await fetch(`/api/crud/getExecutionDebug/${executionId["$oid"]}`)).json();
+            if(debugResult.url) {
+                this.stepsDebug = debugResult.url;
+            }
             this.selectedStep = null;
         },
 
-
-
+        async retryExecution(executionId) {
+            console.log('Retrying Execution');
+            var result = await (await fetch(`/api/exec/retryExecution/${executionId}`)).json();
+            console.log(result);
+            this.loadList();
+        }
     }
 }

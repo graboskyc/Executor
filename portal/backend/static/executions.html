@@ -94,6 +94,8 @@
                                 <span x-show="s.result.length != 0" class="material-symbols-outlined">task_alt</span>
                             </li>
                         </template>
+                        <a target="_blank" :href="stepsDebug" role="button" x-show="stepsDebug" style="width: 100%;margin-top: 10px;">View In Splunk</a>
+                        <button style="width: 100%;margin-top: 10px;" x-on:click="retryExecution(selectedId.$oid)" class="secondary">Retry Execution</button>
                     </ul>
                 </article>
 

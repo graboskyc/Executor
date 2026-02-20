@@ -123,6 +123,19 @@ async def enqueueWorkflow(id:str, d: Dict[Any, Any]):
     d = db["executions"].insert_one(newObj)
     return {"executionId": str(d.inserted_id) }
 
+@api_app.get("/exec/retryExecution/{id}")
+async def retryExecution(id:str):
+    # get current matching ID, copy it, set status to queued, and insert as new document
+    d = db["executions"].find_one({"_id": ObjectId(id) })
+    newObj = d.copy()
+    newObj.pop("_id")
+    newObj.pop("ownedBy")
+    newObj["status"] = "queued"
+    newObj["created"] = datetime.now(timezone.utc)
+    newObj["modified"] = datetime.now(timezone.utc)
+    d = db["executions"].insert_one(newObj)
+    return {"executionId": str(d.inserted_id) }
+
 @api_app.post("/exec/getNextExecution")
 async def getNextExecution(server: Dict[Any, Any]):
     me = db["servers"].find_one({"_id": server["name"]})
@@ -201,6 +214,20 @@ async def listAllExecutions(errored_only: bool = False):
 async def listExecutionSteps(id:str):
     d = db["executions"].find_one({"_id": ObjectId(id) })
     return json.loads(dumps(d))
+
+@api_app.get("/crud/getExecutionDebug/{id}")
+async def getExecutionDebug(id:str):
+    if "SPLUNKSERVER" in os.environ:
+        if "SPLUNKINDEX" in os.environ:
+            d = db["executions"].find_one({"_id": ObjectId(id) })
+            splunkServer = os.environ["SPLUNKSERVER"].strip()
+            splunkIndex = os.environ["SPLUNKINDEX"].strip()
+            serverName = d["ownedBy"]
+            # format of url is ?q=search%20index%3Dsa-prod%20source%3D"*SERVER*"&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest=1771431082&latest=1771519582&sid=1771519865.228150
+            url = f"{splunkServer}/en-US/app/search/search?q=search%20index%3D{splunkIndex}%20source%3D%22*{serverName}*%22&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest={int(d['created'].timestamp())}&latest={int((d['created'] + timedelta(minutes=10)).timestamp())}"
+            return {"url": url}
+    else:
+        return {}, 200
 
 @api_app.post("/exec/completeExecution/{id}")
 async def completeExecution(id:str):

@@ -27,7 +27,7 @@ if [ $EXITCODE -eq 0 ]
     echo
     docker stop executor
     docker rm executor
-    docker run -t -i -d -p 9999:80 --name executor -e "MDBCONNSTR=${MDBCONNSTR}" --restart unless-stopped graboskyc/executor:${abbrvhash}
+    docker run -t -i -d -p 9999:80 --name executor -e "MDBCONNSTR=${MDBCONNSTR}" -e "SPLUNKSERVER=${SPLUNKSERVER}" -e "SPLUNKINDEX=${SPLUNKINDEX}" --restart unless-stopped graboskyc/executor:${abbrvhash}
 
     echo
     echo "+================================"
