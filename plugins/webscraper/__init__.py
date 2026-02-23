@@ -9,10 +9,22 @@ import requests
 context = json.loads(os.environ["EXECUTORTASK"].strip())
 arg = next(obj for obj in context["arguments"] if obj["key"] == "page")
 link = arg["value"]
-#print("DOWNLOADING" + link)
-page = requests.get(link)
-soup = BeautifulSoup(page.content, 'html.parser')
-title = soup.title.text
-content = soup.get_text()
+response = {}
+response["crawls"] = []
 
-print(content)
+if isinstance(link, list):
+    for l in link:
+        #print("DOWNLOADING" + link)
+        page = requests.get(l)
+        soup = BeautifulSoup(page.content, 'html.parser')
+        title = soup.title.text
+        content = soup.get_text()
+        response["crawls"].append({"title": title, "content": content})
+else:
+    page = requests.get(link)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    title = soup.title.text
+    content = soup.get_text()
+    response["crawls"].append({"title": title, "content": content})
+
+print(json.dumps(response))
