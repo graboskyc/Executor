@@ -94,6 +94,7 @@
                                 <span x-show="s.result.length != 0" class="material-symbols-outlined">task_alt</span>
                             </li>
                         </template>
+                        <button class="outline" style="width: 100%;margin-top: 10px;" x-on:click="navigator.clipboard.writeText(selectedId.$oid).then(() => alert('Execution ID ' + selectedId.$oid + ' copied to clipboard!'))" x-show="selectedId && selectedId.$oid">Copy Execution ID</button>
                         <a target="_blank" :href="stepsDebug" role="button" x-show="stepsDebug" style="width: 100%;margin-top: 10px;" class="outline">View In Splunk</a>
                         <button style="width: 100%;margin-top: 10px;" x-on:click="loadSteps(originalId)" class="outline secondary" x-show="originalId">View Original Execution</button>
                         <button style="width: 100%;margin-top: 10px;" x-on:click="retryExecution(selectedId.$oid)" class="secondary">Retry Execution</button>
