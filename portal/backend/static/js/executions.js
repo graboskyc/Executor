@@ -1,3 +1,12 @@
+async function getWithAuthAlert(url) {
+    var response = await fetch(url);
+    if (response.status === 401 || response.status === 403) {
+        alert("You are not logged in or in the correct group.");
+    } else {
+        return response;
+    }
+}
+
 function init() {
     return {
         executions: [],
@@ -12,13 +21,13 @@ function init() {
         async loadList() {
             console.log('Loading List');
             if(this.showOnlyErrored) {
-                var result = await (await fetch('/api/crud/listAllExecutions?errored_only=true')).json();
+                var result = await (await getWithAuthAlert('/api/crud/listAllExecutions?errored_only=true')).json();
             } else {
-                var result = await (await fetch('/api/crud/listAllExecutions')).json();
+                var result = await (await getWithAuthAlert('/api/crud/listAllExecutions')).json();
             }
             console.log(result);
             this.executions= result;
-            var chartsResult = await (await fetch('/api/crud/getPageConfig/executions')).json();
+            var chartsResult = await (await getWithAuthAlert('/api/crud/getPageConfig/executions')).json();
             this.charts = chartsResult.charts;
         }, 
 
@@ -41,7 +50,7 @@ function init() {
                     selectedLi.style.background = '#a5d601'; 
                 }
             }, 100);
-            var result = await (await fetch(`/api/crud/listExecutionSteps/${executionId["$oid"]}`)).json();
+            var result = await (await getWithAuthAlert(`/api/crud/listExecutionSteps/${executionId["$oid"]}`)).json();
             this.steps = result.workflow.wf;
             // if there isRetry:true, then show button to parent
             if (result.isRetry) {
@@ -49,7 +58,7 @@ function init() {
             } else {
                 this.originalId = null;
             }
-            var debugResult = await (await fetch(`/api/crud/getExecutionDebug/${executionId["$oid"]}`)).json();
+            var debugResult = await (await getWithAuthAlert(`/api/crud/getExecutionDebug/${executionId["$oid"]}`)).json();
             if(debugResult.url) {
                 this.stepsDebug = debugResult.url;
             }
@@ -76,7 +85,7 @@ function init() {
 
         async retryExecution(executionId) {
             console.log('Retrying Execution');
-            var result = await (await fetch(`/api/exec/retryExecution/${executionId}`)).json();
+            var result = await (await getWithAuthAlert(`/api/crud/retryExecution/${executionId}`)).json();
             console.log(result);
             this.loadList();
         }

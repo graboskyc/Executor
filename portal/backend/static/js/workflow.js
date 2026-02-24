@@ -1,3 +1,12 @@
+async function getWithAuthAlert(url) {
+    var response = await fetch(url);
+    if (response.status === 401 || response.status === 403) {
+        alert("You are not logged in or in the correct group.");
+    } else {
+        return response;
+    }
+}
+
 function init() {
     return {
         workflow: {},
@@ -12,8 +21,8 @@ function init() {
         async loadList() {
             console.log('Loading List');
             var id = this.getQueryVariable("_id");
-            this.workflow= await (await fetch('/api/crud/getWorkflow/'+id)).json();
-            this.allTemplates= await (await fetch('/api/crud/listAllTemplate')).json();
+            this.workflow= await (await getWithAuthAlert('/api/crud/getWorkflow/'+id)).json();
+            this.allTemplates= await (await getWithAuthAlert('/api/crud/listAllTemplate')).json();
         }, 
 
         async saveWorkflow() {
@@ -50,7 +59,7 @@ function init() {
         async editTask(t) {
             this.selectedTemplate = t;
             this.oldSelectedTemplate = t;
-            this.latestTemplateVersion = await (await fetch('/api/crud/getTemplate/'+t._id.$oid)).json();
+            this.latestTemplateVersion = await (await getWithAuthAlert('/api/crud/getTemplate/'+t._id.$oid)).json();
             this.openModal = true;
         },
 
@@ -79,7 +88,7 @@ function init() {
             if (!result) {
                 return;
             }
-            this.latestTemplateVersion = await (await fetch('/api/crud/getTemplate/'+this.selectedTemplate._id.$oid)).json();
+            this.latestTemplateVersion = await (await getWithAuthAlert('/api/crud/getTemplate/'+this.selectedTemplate._id.$oid)).json();
             var i = this.workflow.wf.findIndex(x => x._id == this.selectedTemplate._id);
             console.log(i);
             this.workflow.wf[i] = this.latestTemplateVersion;

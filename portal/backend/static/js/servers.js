@@ -1,3 +1,12 @@
+async function getWithAuthAlert(url) {
+    var response = await fetch(url);
+    if (response.status === 401 || response.status === 403) {
+        alert("You are not logged in or in the correct group.");
+    } else {
+        return response;
+    }
+}
+
 function init() {
     return {
         servers: [],
@@ -26,8 +35,8 @@ function init() {
 
         async loadList() {
             console.log('Loading List');
-            var result = await (await fetch('/api/exec/servers')).json();
-            var statusResult = await (await fetch('/api/analytics/serverStats')).json();
+            var result = await (await getWithAuthAlert('/api/crud/servers')).json();
+            var statusResult = await (await getWithAuthAlert('/api/analytics/serverStats')).json();
             this.serverStatus = statusResult;
             console.log(this.serverStatus);
             //console.log(result);
@@ -47,13 +56,13 @@ function init() {
                 const diffHours = diffMs / (1000 * 60 * 60);
                 return diffHours > 2;
             });
-            var chartsResult = await (await fetch('/api/crud/getPageConfig/servers')).json();
+            var chartsResult = await (await getWithAuthAlert('/api/crud/getPageConfig/servers')).json();
             this.charts = chartsResult.charts;
         }, 
 
         async updateServer(server) {
             console.log('Updating server', server);
-            await fetch('/api/exec/updateServer', {
+            await fetch('/api/crud/updateServer', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

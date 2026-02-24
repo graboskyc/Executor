@@ -1,4 +1,7 @@
 from fastapi import FastAPI, Response, File, UploadFile, Form
+from fastapi import Request
+from fastapi.responses import JSONResponse
+import jwt
 import pymongo
 from datetime import datetime, timedelta
 from datetime import timezone
@@ -15,6 +18,30 @@ import gridfs
 from fastapi.responses import StreamingResponse
 
 api_app = FastAPI(title="api-app")
+def kanopy_internal_auth_middleware(app):
+    async def middleware(request: Request, call_next):
+        # Only enforce for /api/* paths and if both env vars exist
+        required_header = os.environ.get("REQUIREDAUTHHEADER").strip()
+        required_group = os.environ.get("REQUIREDAUTHGROUP").strip()
+        if required_header and required_group:
+            if request.url.path.startswith("/api/crud") or request.url.path.startswith("/api/analytics"):
+                header = request.headers.get(required_header)
+                if not header:
+                    return JSONResponse(status_code=401, content={"detail": f"Missing {required_header} header"})
+                try:
+                    # JWT decode without verification for demo; add secret/algorithm for production
+                    payload = jwt.decode(header, options={"verify_signature": False})
+                except Exception:
+                    return JSONResponse(status_code=401, content={"detail": "Invalid JWT in header"})
+                groups = payload.get("groups", [])
+                # allowed_roles is a list, can be comma-separated in env var
+                allowed_roles = [role.strip() for role in required_group.split(",") if role.strip()]
+                if not any(role in groups for role in allowed_roles):
+                    return JSONResponse(status_code=403, content={"detail": "Insufficient role"})
+        return await call_next(request)
+    return middleware
+
+api_app.middleware("http")(kanopy_internal_auth_middleware(api_app))
 app = FastAPI(title="spa-app")
 app.mount("/api", api_app)
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
@@ -123,7 +150,7 @@ async def enqueueWorkflow(id:str, d: Dict[Any, Any]):
     d = db["executions"].insert_one(newObj)
     return {"executionId": str(d.inserted_id) }
 
-@api_app.get("/exec/retryExecution/{id}")
+@api_app.get("/crud/retryExecution/{id}")
 async def retryExecution(id:str):
     # get current matching ID, copy it, set status to queued, and insert as new document
     d = db["executions"].find_one({"_id": ObjectId(id) })
@@ -159,7 +186,7 @@ async def getNextExecution(server: Dict[Any, Any]):
     else:
         return {"workflow":{"wf":[]}, "nextPoll": int(waitUntil)}
 
-@api_app.get("/exec/servers")
+@api_app.get("/crud/servers")
 async def listServers():
     cursor = db["servers"].find({}).sort("lastSeen", pymongo.DESCENDING)
     return json.loads(dumps(cursor))
@@ -179,7 +206,7 @@ async def serverStats():
     cursor = db["executions"].aggregate(pipeline)
     return json.loads(dumps(cursor))
 
-@api_app.put("/exec/updateServer")
+@api_app.put("/crud/updateServer")
 async def updateServer(server: Dict[Any, Any]):
     db["servers"].update_one({"_id": server["name"]}, {"$set": {"nextPoll":server["nextPoll"]}})
 
