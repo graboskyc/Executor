@@ -21,9 +21,11 @@ api_app = FastAPI(title="api-app")
 def kanopy_internal_auth_middleware(app):
     async def middleware(request: Request, call_next):
         # Only enforce for /api/* paths and if both env vars exist
-        required_header = os.environ.get("REQUIREDAUTHHEADER").strip()
-        required_group = os.environ.get("REQUIREDAUTHGROUP").strip()
+        required_header = os.environ.get("REQUIREDAUTHHEADER")
+        required_group = os.environ.get("REQUIREDAUTHGROUP")
         if required_header and required_group:
+            required_header = os.environ.get("REQUIREDAUTHHEADER").strip()
+            required_group = os.environ.get("REQUIREDAUTHGROUP").strip()
             if request.url.path.startswith("/api/crud") or request.url.path.startswith("/api/analytics"):
                 header = request.headers.get(required_header)
                 if not header:
