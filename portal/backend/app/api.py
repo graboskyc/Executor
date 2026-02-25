@@ -253,10 +253,13 @@ async def getExecutionDebug(id:str):
             d = db["executions"].find_one({"_id": ObjectId(id) })
             splunkServer = os.environ["SPLUNKSERVER"].strip()
             splunkIndex = os.environ["SPLUNKINDEX"].strip()
-            serverName = d["ownedBy"]
-            # format of url is ?q=search%20index%3Dsa-prod%20source%3D"*SERVER*"&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest=1771431082&latest=1771519582&sid=1771519865.228150
-            url = f"{splunkServer}/en-US/app/search/search?q=search%20index%3D{splunkIndex}%20source%3D%22*{serverName}*%22&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest={int(d['created'].timestamp())}&latest={int((d['created'] + timedelta(minutes=10)).timestamp())}"
-            return {"url": url}
+            if "ownedBy" in d:
+                serverName = d["ownedBy"]
+                # format of url is ?q=search%20index%3Dsa-prod%20source%3D"*SERVER*"&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest=1771431082&latest=1771519582&sid=1771519865.228150
+                url = f"{splunkServer}/en-US/app/search/search?q=search%20index%3D{splunkIndex}%20source%3D%22*{serverName}*%22&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest={int(d['created'].timestamp())}&latest={int((d['created'] + timedelta(minutes=10)).timestamp())}"
+                return {"url": url}
+            else:
+                return {}, 200
     else:
         return {}, 200
 
