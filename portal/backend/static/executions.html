@@ -86,13 +86,17 @@
                 </article>
 
                 <article x-show="steps != null">
-                    <h1>Steps (<span x-text="selectedId.$oid.slice(-5)"></span>) <span class="material-symbols-outlined" x-on:click="loadSteps(selectedId)">frame_reload</span></h1>
+                    <h1>Steps 
+                        (<span x-text="selectedId.$oid.slice(-5)"></span>) 
+                        <span class="material-symbols-outlined" x-on:click="loadSteps(selectedId)">frame_reload</span>
+                    </h1>
                     <ul style="max-height: 70vh; overflow-y: scroll;">
                         <template x-for="s in steps">
                             <li x-on:click="setSelectedStep(s)" :id="'step-' + s._id.$oid">
                                 <span x-text="s.title"></span>
                                 <span x-show="!s.result" class="material-symbols-outlined">hourglass_top</span>
                                 <span x-show="s.result.length != 0" class="material-symbols-outlined">task_alt</span>
+                                <span x-show="s.status == 'error'" class="material-symbols-outlined">warning</span>
                             </li>
                         </template>
                         <button class="outline" style="width: 100%;margin-top: 10px;" x-on:click="navigator.clipboard.writeText(selectedId.$oid).then(() => alert('Execution ID ' + selectedId.$oid + ' copied to clipboard!'))" x-show="selectedId && selectedId.$oid">Copy Execution ID</button>

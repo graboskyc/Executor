@@ -64,10 +64,10 @@ while True:
 
             print("Saving result")
             # check for python error
-            if "returned non-zero exit status" in result:
+            if ("returned non-zero exit status" in result) or ("Traceback (most recent call last):" in result):
                 print("Error detected in output")
                 response = requests.post(f"{server}/api/exec/errorExecution/"+execId, json = agentDetails)
-                postObj = {"result":str(e), "status":"error", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
+                postObj = {"result":result, "status":"error", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
                 response = requests.post(f"{server}/api/exec/executionOutput", json = postObj)
             else:
                 postObj = {"result":result, "status":"complete", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
@@ -90,7 +90,20 @@ while True:
 
     if index > 0:
         print("All workflows complete")
-        response = requests.post(f"{server}/api/exec/completeExecution/"+execId, json = agentDetails)
+        wasSuccess = True
+        for wf in resObj['workflow']["wf"]:
+            if wf["status"] == "error":
+                wasSuccess = False
+                break
+
+        if wasSuccess:
+            postObj = agentDetails
+            postObj["status"] = "complete"
+            response = requests.post(f"{server}/api/exec/completeExecution/"+execId, json = postObj)
+        else:
+            postObj = agentDetails
+            postObj["status"] = "error"
+            response = requests.post(f"{server}/api/exec/completeExecution/"+execId, json = postObj)
 
     #print("Sleeping")
     time.sleep(nextPoll)

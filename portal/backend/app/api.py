@@ -261,8 +261,8 @@ async def getExecutionDebug(id:str):
         return {}, 200
 
 @api_app.post("/exec/completeExecution/{id}")
-async def completeExecution(id:str):
-    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "complete"} })
+async def completeExecution(id:str, d: Dict[Any, Any]):
+    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": d["status"]}})
 
 @api_app.post("/exec/errorExecution/{id}")
 async def errorExecution(id:str):
