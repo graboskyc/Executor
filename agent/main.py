@@ -63,8 +63,15 @@ while True:
                 result = subprocess.check_output("node index.js", shell=True, text=True, stderr=subprocess.STDOUT)
 
             print("Saving result")
-            postObj = {"result":result, "status":"complete", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
-            response = requests.post(f"{server}/api/exec/executionOutput", json = postObj)
+            # check for python error
+            if "returned non-zero exit status" in result:
+                print("Error detected in output")
+                response = requests.post(f"{server}/api/exec/errorExecution/"+execId, json = agentDetails)
+                postObj = {"result":str(e), "status":"error", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
+                response = requests.post(f"{server}/api/exec/executionOutput", json = postObj)
+            else:
+                postObj = {"result":result, "status":"complete", "taskId":wf["_id"]["$oid"], "workflowId":resObj["_id"], "index":index}
+                response = requests.post(f"{server}/api/exec/executionOutput", json = postObj)
             print(postObj)
         except subprocess.CalledProcessError as e:
             print("Error in subprocess")

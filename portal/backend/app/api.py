@@ -215,7 +215,7 @@ async def updateServer(server: Dict[Any, Any]):
 @api_app.post("/exec/executionOutput")
 async def executionOutput(q: Dict[Any, Any]):
     query = {"_id": ObjectId(q["workflowId"]["$oid"])}
-    update = {"$set": {"workflow.wf."+str(q["index"])+".status": "complete", "workflow.wf."+str(q["index"])+".result": q["result"]}}
+    update = {"$set": {"workflow.wf."+str(q["index"])+".status": q["status"], "workflow.wf."+str(q["index"])+".result": q["result"]}}
     print(update)
     db["executions"].update_one(query, update)
 
