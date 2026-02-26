@@ -8,6 +8,18 @@ function init() {
         showOnlyErrored: false,
         stepsDebug: null,
         originalId: null,
+
+        async clearSelectedExe() {
+            document.querySelectorAll('li[id^="execution-"]').forEach(li => {
+                li.style.background = '';
+            });
+        },
+
+        async clearSelectedStep() {
+             document.querySelectorAll('li[id^="step-"]').forEach(li => {
+                li.style.background = '';
+            });
+        },
        
         async loadList() {
             console.log('Loading List');
@@ -16,6 +28,14 @@ function init() {
             } else {
                 var result = await (await getWithAuthAlert('/api/crud/listAllExecutions')).json();
             }
+            setTimeout(() => {
+                this.clearSelectedStep();
+                this.clearSelectedExe();
+                this.selectedStep = null;
+                this.selectedId = null;
+                this.steps = null;
+
+            }, 10);
             console.log(result);
             this.executions= result;
             var chartsResult = await (await getWithAuthAlert('/api/crud/getPageConfig/executions')).json();
@@ -29,18 +49,14 @@ function init() {
             // Highlight the selected execution LI
             setTimeout(() => {
                 // Remove highlight from all execution LIs
-                document.querySelectorAll('li[id^="execution-"]').forEach(li => {
-                    li.style.background = '';
-                });
-                document.querySelectorAll('li[id^="step-"]').forEach(li => {
-                    li.style.background = '';
-                });
+                this.clearSelectedExe();
+                this.clearSelectedStep();
                 // Add highlight to the selected LI
                 const selectedLi = document.getElementById('execution-' + (typeof executionId === 'object' && executionId.$oid ? executionId.$oid : executionId));
                 if(selectedLi) {
                     selectedLi.style.background = '#a5d601'; 
                 }
-            }, 100);
+            }, 10);
             var result = await (await getWithAuthAlert(`/api/crud/listExecutionSteps/${executionId["$oid"]}`)).json();
             this.steps = result.workflow.wf;
             // if there isRetry:true, then show button to parent
@@ -60,10 +76,7 @@ function init() {
             this.selectedStep = step;
             // Highlight the selected step LI
             setTimeout(() => {
-                // Remove highlight from all step LIs
-                document.querySelectorAll('li[id^="step-"]').forEach(li => {
-                    li.style.background = '';
-                });
+                this.clearSelectedStep();
                 // Add highlight to the selected LI
                 if(step && step._id && step._id.$oid) {
                     const selectedLi = document.getElementById('step-' + step._id.$oid);
@@ -71,7 +84,7 @@ function init() {
                         selectedLi.style.background = '#a5d601'; // light yellow
                     }
                 }
-            }, 100);
+            }, 10);
         },
 
         async retryExecution(executionId) {
