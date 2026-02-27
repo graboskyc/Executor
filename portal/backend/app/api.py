@@ -215,7 +215,7 @@ async def updateServer(server: Dict[Any, Any]):
 @api_app.post("/exec/executionOutput")
 async def executionOutput(q: Dict[Any, Any]):
     query = {"_id": ObjectId(q["workflowId"]["$oid"])}
-    update = {"$set": {"workflow.wf."+str(q["index"])+".status": q["status"], "workflow.wf."+str(q["index"])+".result": q["result"]}}
+    update = {"$set": {"modified": datetime.now(timezone.utc),"workflow.wf."+str(q["index"])+".status": q["status"], "workflow.wf."+str(q["index"])+".result": q["result"], "workflow.wf."+str(q["index"])+".modified": datetime.now(timezone.utc)}}
     print(update)
     db["executions"].update_one(query, update)
 
@@ -265,11 +265,11 @@ async def getExecutionDebug(id:str):
 
 @api_app.post("/exec/completeExecution/{id}")
 async def completeExecution(id:str, d: Dict[Any, Any]):
-    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": d["status"]}})
+    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": d["status"], "modified": datetime.now(timezone.utc)}})
 
 @api_app.post("/exec/errorExecution/{id}")
 async def errorExecution(id:str):
-    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "error"} })
+    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "error", "modified": datetime.now(timezone.utc)}})
 
 @api_app.get("/exec/getLastStepOutput/{execid}/{currStepId}")
 async def getLastStepOutput(execid:str, currStepId:str):
