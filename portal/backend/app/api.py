@@ -208,6 +208,73 @@ async def serverStats():
     cursor = db["executions"].aggregate(pipeline)
     return json.loads(dumps(cursor))
 
+@api_app.get("/analytics/exeStats")
+async def exeStats():
+    returnDoc = {
+        "allTime": 0,
+        "lastMonth":0,
+        "lastWeek":0
+    }
+
+    allTimePipeline = [
+        {
+            '$group': {
+                '_id': "allTime",
+                'count': {
+                    '$sum': 1
+                }
+            }
+        }
+    ]
+    cursor = db["executions"].aggregate(allTimePipeline)
+    lc = list(cursor)
+    allTimeCount = lc[0]["count"] if lc else 0
+    returnDoc["allTime"] = f"{allTimeCount:,}"
+
+    lastMonthPipeline = [
+        {
+            '$match': {
+                'created': {
+                    '$gte': datetime.now(timezone.utc) - timedelta(days=30)
+                }
+            }
+        }, {
+            '$group': {
+                '_id': "lastMonth",
+                'count': {
+                    '$sum': 1
+                }
+            }
+        }
+    ]
+    cursor = db["executions"].aggregate(lastMonthPipeline)
+    lc = list(cursor)
+    lastMonthCount = lc[0]["count"] if lc else 0
+    returnDoc["lastMonth"] = f"{lastMonthCount:,}"
+
+    lastWeekPipeline = [
+        {
+            '$match': {
+                'created': {
+                    '$gte': datetime.now(timezone.utc) - timedelta(days=7)
+                }
+            }
+        }, {
+            '$group': {
+                '_id': "lastWeek",
+                'count': {
+                    '$sum': 1
+                }
+            }
+        }
+    ]
+    cursor = db["executions"].aggregate(lastWeekPipeline)
+    lc = list(cursor)
+    lastWeekCount = lc[0]["count"] if lc else 0
+    returnDoc["lastWeek"] = f"{lastWeekCount:,}"
+
+    return returnDoc
+
 @api_app.put("/crud/updateServer")
 async def updateServer(server: Dict[Any, Any]):
     db["servers"].update_one({"_id": server["name"]}, {"$set": {"nextPoll":server["nextPoll"]}})

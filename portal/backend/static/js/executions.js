@@ -8,6 +8,7 @@ function init() {
         showOnlyErrored: false,
         stepsDebug: null,
         originalId: null,
+        exeStats: null,
 
         async clearSelectedExe() {
             document.querySelectorAll('li[id^="execution-"]').forEach(li => {
@@ -40,7 +41,9 @@ function init() {
             this.executions= result;
             var chartsResult = await (await getWithAuthAlert('/api/crud/getPageConfig/executions')).json();
             this.charts = chartsResult.charts;
-        }, 
+            var statsResult = await (await getWithAuthAlert('/api/analytics/exeStats')).json();
+            this.exeStats = statsResult;
+        },
 
         async loadSteps(executionId) {
             console.log('Loading Steps');
