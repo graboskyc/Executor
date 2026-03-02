@@ -294,13 +294,13 @@ async def downloadZip(pointerid: str):
 
 @api_app.get("/crud/listAllExecutions")
 async def listAllExecutions(errored_only: bool = False):
-    two_days_ago = datetime.now(timezone.utc) - timedelta(days=2)
-    query = {"created": {"$gte": two_days_ago}}
+    three_days_ago = datetime.now(timezone.utc) - timedelta(days=3)
+    query = {"created": {"$gte": three_days_ago}}
     if errored_only:
-        one_minute_ago = datetime.now(timezone.utc) - timedelta(minutes=1)
+        ten_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=10)
         query["$or"] = [
             {"status": "error"},
-            {"status": "queued", "created": {"$lt": one_minute_ago}}
+            {"status": "queued", "created": {"$lt": ten_minutes_ago}}
         ]
     cursor = db["executions"].find(
         query,

@@ -9,6 +9,32 @@ function init() {
         stepsDebug: null,
         originalId: null,
         exeStats: null,
+        exeStatsPoller: null,
+
+        init() {
+            this.startExeStatsPolling();
+            window.addEventListener('beforeunload', () => {
+                if (this.exeStatsPoller) {
+                    clearInterval(this.exeStatsPoller);
+                    this.exeStatsPoller = null;
+                }
+            });
+        },
+
+        startExeStatsPolling() {
+            if (this.exeStatsPoller) {
+                clearInterval(this.exeStatsPoller);
+            }
+            this.exeStatsPoller = setInterval(() => {
+                this.loadExeStats();
+            }, 60000);
+        },
+
+        async loadExeStats() {
+            console.log('Loading Execution Stats');
+            var statsResult = await (await getWithAuthAlert('/api/analytics/exeStats')).json();
+            this.exeStats = statsResult;
+        },
 
         async clearSelectedExe() {
             document.querySelectorAll('li[id^="execution-"]').forEach(li => {
@@ -41,8 +67,7 @@ function init() {
             this.executions= result;
             var chartsResult = await (await getWithAuthAlert('/api/crud/getPageConfig/executions')).json();
             this.charts = chartsResult.charts;
-            var statsResult = await (await getWithAuthAlert('/api/analytics/exeStats')).json();
-            this.exeStats = statsResult;
+            await this.loadExeStats();
         },
 
         async loadSteps(executionId) {
