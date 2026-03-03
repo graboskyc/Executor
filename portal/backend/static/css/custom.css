@@ -111,3 +111,7 @@ body {
     border: 1px solid rgb(0, 30, 43);
     box-shadow: rgb(0, 0, 0) 0px 5px 0px;
 }
+
+html {
+    background-color: var(--pico-primary-background) !important;
+}

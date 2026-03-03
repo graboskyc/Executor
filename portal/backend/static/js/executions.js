@@ -10,6 +10,7 @@ function init() {
         originalId: null,
         exeStats: null,
         exeStatsPoller: null,
+        exeStatsLoading: false,
 
         init() {
             this.startExeStatsPolling();
@@ -31,9 +32,11 @@ function init() {
         },
 
         async loadExeStats() {
+            this.exeStatsLoading = true;
             console.log('Loading Execution Stats');
             var statsResult = await (await getWithAuthAlert('/api/analytics/exeStats')).json();
             this.exeStats = statsResult;
+            this.exeStatsLoading = false;
         },
 
         async clearSelectedExe() {
