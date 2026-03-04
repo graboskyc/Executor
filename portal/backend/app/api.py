@@ -300,6 +300,7 @@ async def listAllExecutions(errored_only: bool = False):
         ten_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=10)
         query["$or"] = [
             {"status": "error"},
+            {"status": "errorAck"},
             {"status": "queued", "created": {"$lt": ten_minutes_ago}}
         ]
     cursor = db["executions"].find(
@@ -337,6 +338,11 @@ async def completeExecution(id:str, d: Dict[Any, Any]):
 @api_app.post("/exec/errorExecution/{id}")
 async def errorExecution(id:str):
     db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "error", "modified": datetime.now(timezone.utc)}})
+
+
+@api_app.post("/exec/errorAck/{id}")
+async def errorAck(id:str):
+    db["executions"].update_one({"_id": ObjectId(id) }, {"$set": {"status": "errorAck", "errorAck": datetime.now(timezone.utc)}})
 
 @api_app.get("/exec/getLastStepOutput/{execid}/{currStepId}")
 async def getLastStepOutput(execid:str, currStepId:str):

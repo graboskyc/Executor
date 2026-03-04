@@ -3,6 +3,7 @@ function init() {
         executions: [],
         steps: null,
         selectedStep: null,
+        selectedStepStatus: null,
         selectedId:null,
         charts: [],
         showOnlyErrored: false,
@@ -64,6 +65,7 @@ function init() {
                 this.selectedStep = null;
                 this.selectedId = null;
                 this.steps = null;
+                this.selectedStepStatus = null;
 
             }, 10);
             console.log(result);
@@ -90,6 +92,7 @@ function init() {
             }, 10);
             var result = await (await getWithAuthAlert(`/api/crud/listExecutionSteps/${executionId["$oid"]}`)).json();
             this.steps = result.workflow.wf;
+            this.selectedStepStatus = result.status;
             // if there isRetry:true, then show button to parent
             if (result.isRetry) {
                 this.originalId = result.originalId;
@@ -101,6 +104,14 @@ function init() {
                 this.stepsDebug = debugResult.url;
             }
             this.selectedStep = null;
+        },
+
+        async errorAckExecution(executionId) {
+            console.log('Acknowledging Error');
+            var result = await (await fetch(`/api/exec/errorAck/${executionId}`, {
+                method: 'POST'
+            })).json();
+            this.loadList();
         },
 
         async setSelectedStep(step) {
