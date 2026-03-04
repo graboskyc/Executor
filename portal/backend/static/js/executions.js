@@ -54,11 +54,13 @@ function init() {
        
         async loadList() {
             console.log('Loading List');
+            
             if(this.showOnlyErrored) {
                 var result = await (await getWithAuthAlert('/api/crud/listAllExecutions?errored_only=true')).json();
             } else {
                 var result = await (await getWithAuthAlert('/api/crud/listAllExecutions')).json();
             }
+
             setTimeout(() => {
                 this.clearSelectedStep();
                 this.clearSelectedExe();
@@ -70,9 +72,14 @@ function init() {
             }, 10);
             console.log(result);
             this.executions= result;
-            var chartsResult = await (await getWithAuthAlert('/api/crud/getPageConfig/executions')).json();
-            this.charts = chartsResult.charts;
-            await this.loadExeStats();
+
+            if(this.charts.length == 0) {
+                var chartsResult = await (await getWithAuthAlert('/api/crud/getPageConfig/executions')).json();
+                this.charts = chartsResult.charts;
+            }
+            if (this.exeStats === null) {
+                await this.loadExeStats();
+                }
         },
 
         async loadSteps(executionId) {
