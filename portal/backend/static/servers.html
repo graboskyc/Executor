@@ -75,8 +75,8 @@
                             <template x-for="s in currentServers">
                                 <tr>
                                     <td><span x-text="s._id"></span></td>
-                                    <td><span x-text="s.firstSeen.$date"></span><br />(<span x-text="minutesAgo(s.firstSeen.$date)" style="font-size: x-small;"></span>)</td>
-                                    <td><span x-text="s.lastSeen.$date"></span><br />(<span x-text="minutesAgo(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                    <td><span x-text="s.firstSeen.$date"></span><br />(<span x-text="ageOld(s.firstSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                    <td><span x-text="s.lastSeen.$date"></span><br />(<span x-text="ageOld(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
                                     <td><span x-text="getStatus(s._id)"></span></td>
                                     <td>
                                         <input type="number" x-model="s.nextPoll" style="display: inline-block; width: 75px; font-size: small;" />
@@ -106,8 +106,8 @@
                             <template x-for="s in oldServers">
                                 <tr>
                                     <td><span x-text="s._id"></span></td>
-                                    <td><span x-text="s.firstSeen.$date"></span><br />(<span x-text="minutesAgo(s.firstSeen.$date)" style="font-size: x-small;"></span>)</td>
-                                    <td><span x-text="s.lastSeen.$date"></span><br />(<span x-text="minutesAgo(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                    <td><span x-text="s.firstSeen.$date"></span><br />(<span x-text="ageOld(s.firstSeen.$date)" style="font-size: x-small;"></span>)</td>
+                                    <td><span x-text="s.lastSeen.$date"></span><br />(<span x-text="ageOld(s.lastSeen.$date)" style="font-size: x-small;"></span>)</td>
                                     <td><span x-text="getStatus(s._id)"></span></td>
                                     <td>
                                         <input type="number" x-model="s.nextPoll" style="display: inline-block; width: 75px; font-size: small;" />

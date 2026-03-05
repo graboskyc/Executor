@@ -6,12 +6,25 @@ function init() {
         serverStatus: [],
         charts: [],
        
-        minutesAgo(dateStr) {
+        ageOld(dateStr) {
             const date = new Date(dateStr);
             const now = new Date();
             const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            return diffMins + ' min ago';
+            const diffSecs = Math.floor(diffMs / 1000);
+            
+            if (diffSecs < 60) {
+                return diffSecs + ' sec ago';
+            }
+            const diffMins = Math.floor(diffSecs / 60);
+            if (diffMins < 60) {
+                return diffMins + ' min ago';
+            }
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) {
+                return diffHours + ' hr ago';
+            }
+            const diffDays = Math.floor(diffHours / 24);
+            return diffDays + ' day' + (diffDays !== 1 ? 's' : '') + ' ago';
         },
 
         getStatus(serverId) {
