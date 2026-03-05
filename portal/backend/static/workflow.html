@@ -69,6 +69,10 @@
                         <label for="title">Name</label>
                         <input type="text" placeholder="title" name="title" x-model="workflow.name">
 
+                        <label for="isCronType"><input type="checkbox" role="switch" id="isCronType" x-model="isCronType">Make Cron Based</label>
+                        <label for="cronExpression" x-show="isCronType">Cron Expression</label>
+                        <input type="text" name="cronExpression" placeholder="Cron Expression" x-show="isCronType" x-model="cronExpression">
+
                         <h2>Flow <span class="material-symbols-outlined" x-on:click="showToolbox = true" x-show="!showToolbox">add_circle</span></h2>
                         <div style="margin-bottom: 20px;">
                             <div class="fl_endblocks">START</div>

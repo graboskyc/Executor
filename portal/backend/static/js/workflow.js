@@ -8,16 +8,39 @@ function init() {
         showToolbox:true,
         latestTemplateVersion:{},
         showPassword: false,
+        isCronType: false,
+        cronExpression: null,
        
         async loadList() {
             console.log('Loading List');
             var id = this.getQueryVariable("_id");
             this.workflow= await (await getWithAuthAlert('/api/crud/getWorkflow/'+id)).json();
             this.allTemplates= await (await getWithAuthAlert('/api/crud/listAllTemplate')).json();
+
+            if(this.workflow.isCronType) {
+                this.isCronType = true;
+                this.cronExpression = this.workflow.cronExpression;
+            }
         }, 
+
+        validateCronExpression(expr) {
+            // Basic cron pattern: 5 space-separated fields (minute hour day month weekday)
+            // Each field: *, number, or range/list
+            const cronRegex = /^\s*([*]|\d+|\d+-\d+|\d+(,\d+)*|[*]\/[1-9]\d*)\s+([*]|\d+|\d+-\d+|\d+(,\d+)*|[*]\/[1-9]\d*)\s+([*]|\d+|\d+-\d+|\d+(,\d+)*|[*]\/[1-9]\d*)\s+([*]|\d+|\d+-\d+|\d+(,\d+)*|[*]\/[1-9]\d*)\s+([*]|\d+|\d+-\d+|\d+(,\d+)*|[*]\/[1-9]\d*)\s*$/;
+            return cronRegex.test(expr);
+        },
 
         async saveWorkflow() {
             console.log('Saving');
+            if(this.isCronType && this.cronExpression) {
+                if(!this.validateCronExpression(this.cronExpression)) {
+                    alert("Invalid cron expression. Must be 5 fields (minute hour day month weekday), e.g. '0 0 * * *'.");
+                    return;
+                } else {
+                    this.workflow.cronExpression = this.cronExpression;
+                    this.workflow.isCronType = true;
+                }
+            }
             var id = this.getQueryVariable("_id");
             await fetch('/api/crud/saveWorkflow/'+id, {
                 method: 'PUT',

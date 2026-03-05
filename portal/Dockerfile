@@ -7,5 +7,9 @@ RUN rm -rf ./venv activate.sh sample.env
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./backend .
+# Copy entrypoint script
+COPY backend/app/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+RUN touch /var/log/cron.log
 EXPOSE 80
-CMD [ "python", "./main.py" ]
+ENTRYPOINT ["/entrypoint.sh"]
