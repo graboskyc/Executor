@@ -32,6 +32,7 @@ function init() {
 
         async saveWorkflow() {
             console.log('Saving');
+            this.workflow.isCronType = false;
             if(this.isCronType && this.cronExpression) {
                 if(!this.validateCronExpression(this.cronExpression)) {
                     alert("Invalid cron expression. Must be 5 fields (minute hour day month weekday), e.g. '0 0 * * *'.");
