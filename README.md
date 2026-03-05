@@ -19,6 +19,7 @@ This is a system that will allow chaning together multiple scripts in to executi
 * **Task** - When a Template is put into a Workflow, it becomes an instantiation of a Template, and thus a Task. It inherits all of the details of the Template, but then when placed into a Workflow it can have its argument values configured
 * **Workflow** - A saved collection of Tasks in an order
 * **Execution** - A specific instantiation of a Workflow where the entire Workflow is run top to bottom
+* **CRON** - instead of being enqueued by an external call to the webhook. these are workflows enqueued on a regular time-based schedule following the [crontab syntax](https://crontab.guru/)
 
 ## Screenshots
 
@@ -68,6 +69,15 @@ This is a system that will allow chaning together multiple scripts in to executi
                     "gridfspointer":{"$oid":"6723ad020bf8e5e2f1f3dfab"}
                 }
             ]
+        }
+    </code>
+</p>
+<p>There is also an optional set of key/value pairs if this is a cronjob</p>
+<p>
+    <code>
+        {
+            "isCronType" : true,
+            "cronExpression" : "*/5 * * * *"
         }
     </code>
 </p>
