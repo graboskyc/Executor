@@ -111,6 +111,9 @@ function init() {
                 this.stepsDebug = debugResult.url;
             }
             this.selectedStep = null;
+            if (this.steps && this.steps.length > 0) {
+                await this.setSelectedStep(this.steps[0]);
+            }
         },
 
         async errorAckExecution(executionId) {
