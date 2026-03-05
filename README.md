@@ -104,3 +104,19 @@ This is a system that will allow chaning together multiple scripts in to executi
     </code>
 </p>
 <p>If all else fails, <code>EXECUTORPORTAL</code> has the IP address or hostname of the Portal. So you can make API calls directly.</p>
+
+## Extensions
+Certain pages, such as the Executions page, can optionally put MongoDB Charts (or any other iframe embeddable chart for that matter) at the top.
+
+Simply add a record to the `config` collection in the following format:
+
+```
+{
+  "_id": "executions",
+  "charts": [
+    "https://charts.mongodb.com/etc/etc"
+  ]
+}
+```
+
+where the `_id` is the page url (without `.html`) and the strings in the `charts` array are iframe-able charts (such as from MongoDB Charts in Atlas)
