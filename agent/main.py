@@ -59,6 +59,12 @@ while True:
                         os.system("bun install")
                     else:
                         print("No package.json found, skipping node dependency installation")
+                elif wf["engine"] == "golang":
+                    if os.path.exists("go.mod"):
+                        print("Downloading Go dependencies")
+                        os.system("go mod download")
+                    else:
+                        print("No go.mod found, skipping Go dependency installation")
             else:
                 print("Template already downloaded")
                 os.chdir(templateFileId)
@@ -71,6 +77,8 @@ while True:
             elif wf["engine"] == "nodejs":
                 entryFile = "index.ts" if os.path.exists("index.ts") else "index.js"
                 result = subprocess.check_output(f"bun run {entryFile}", shell=True, text=True, stderr=subprocess.STDOUT)
+            elif wf["engine"] == "golang":
+                result = subprocess.check_output("go run main.go", shell=True, text=True, stderr=subprocess.STDOUT)
 
             print("Saving result")
             # check for python error
