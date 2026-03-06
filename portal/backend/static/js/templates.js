@@ -31,6 +31,7 @@ function init() {
                     method: 'PUT',
                     body: data
                 });
+                alert('Template saved successfully!');
             } else {
                 console.log('Creating Template');
                 await fetch('/api/crud/newTemplate', {
@@ -38,6 +39,7 @@ function init() {
                     body: data
                 });
                 this.defaultList();
+                alert('Template created successfully!');
             }
             await this.loadList();
         },
