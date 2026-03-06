@@ -86,7 +86,7 @@
                     <p>Scripts are called Templates</p>
                     <p>There is a sample in the sample plugin directory on our <a href="https://github.com/graboskyc/Executor/tree/main/plugins/helloworld_python3" target="_blank">github</a></p>
                     <p>In short, the python file must be called <code>__init__.py</code> and support Python3 syntax. If any additional packages are required, put them in the <code>requirements.txt</code> file. Everything will be run in an venv so make sure every package you need is included</p>
-                    <p>For node, the current supported version is nodejs 18. It does not yet install packages so all packages must be bundled. The system will unzip and execute index.js.</p>
+                    <p>For node, it uses the <code>bun</code> engine and will install a local cache via the <code>package.json</code> file. I am not a node user so this is less tested than python. The entrypoint is <code>index.js</code> or <code>index.ts</code></p>
                 </details>
 
                 <details>

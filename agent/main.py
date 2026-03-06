@@ -52,6 +52,13 @@ while True:
                     print("Making venv")
                     os.system("python3 -m venv venv")
                     os.system("./venv/bin/pip install -r requirements.txt")
+                elif wf["engine"] == "nodejs":
+                    if os.path.exists("package.json"):
+                        print("Installing node dependencies")
+                        os.environ["BUN_INSTALL_CACHE_DIR"] = os.path.join(os.getcwd(), ".bun-cache")
+                        os.system("bun install")
+                    else:
+                        print("No package.json found, skipping node dependency installation")
             else:
                 print("Template already downloaded")
                 os.chdir(templateFileId)
@@ -62,7 +69,8 @@ while True:
             if wf["engine"] == "python3":
                 result = subprocess.check_output("./venv/bin/python3 __init__.py", shell=True, text=True, stderr=subprocess.STDOUT)
             elif wf["engine"] == "nodejs":
-                result = subprocess.check_output("node index.js", shell=True, text=True, stderr=subprocess.STDOUT)
+                entryFile = "index.ts" if os.path.exists("index.ts") else "index.js"
+                result = subprocess.check_output(f"bun run {entryFile}", shell=True, text=True, stderr=subprocess.STDOUT)
 
             print("Saving result")
             # check for python error
