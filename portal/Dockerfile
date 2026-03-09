@@ -11,5 +11,6 @@ COPY ./backend .
 COPY backend/app/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 RUN touch /var/log/cron.log
+RUN find /usr/src/app -type f -name ".env" -exec rm -f {} +
 EXPOSE 80
 ENTRYPOINT ["/entrypoint.sh"]
