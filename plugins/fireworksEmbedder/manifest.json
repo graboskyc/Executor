@@ -1,0 +1,11 @@
+{
+  "title": "fireworksEmbedder",
+  "engine": "python3",
+  "arguments": [
+    {"key":"fwapikey", "friendlyName":"API Key"},
+    {"key":"fwmodel", "friendlyName":"Model"}
+  ],
+  "icon": "data_array",
+  "link": "https://github.com/graboskyc/Executor/tree/main/plugins/fireworksEmbedder",
+  "revision": 10
+}

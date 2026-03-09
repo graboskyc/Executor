@@ -1,0 +1,11 @@
+{
+  "title": "mdbDocumentWriter",
+  "engine": "python3",
+  "arguments": [
+    {"key":"database", "friendlyName":"database"},
+    {"key":"collection", "friendlyName":"collection"}
+  ],
+  "icon": "database",
+  "link": "https://github.com/graboskyc/Executor/tree/main/plugins/mdbDocumentWriter",
+  "revision": 10
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Hello World Py",
+  "engine": "python3",
+  "arguments": [],
+  "icon": "code",
+  "link": "https://github.com/graboskyc/Executor/tree/main/plugins/helloworld_python3",
+  "revision": 10
+}

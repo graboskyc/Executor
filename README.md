@@ -105,6 +105,50 @@ This is a system that will allow chaning together multiple scripts in to executi
 </p>
 <p>If all else fails, <code>EXECUTORPORTAL</code> has the IP address or hostname of the Portal. So you can make API calls directly.</p>
 
+## Building Templates
+
+The code for a Template is a simple ZIP folder. It must contain:
+
+### Supported Languages 
+
+#### Python
+
+* **MANDATORY** Main python file called `__init__.py` 
+* **OPTIONAL** `requirements.txt` 
+* **OPTIONAL** `manifest.json` (see below)
+* **OPTIONAL** `README.md`
+
+#### NodeJS via Bun
+
+* **MANDATORY** Main node file called `index.js` or `index.ts` 
+* **OPTIONAL** `package.json` 
+* **OPTIONAL** `manifest.json` (see below)
+* **OPTIONAL** `README.md`
+
+#### Golang
+
+* **MANDATORY** Main golang file called `main.go` 
+* **OPTIONAL** `go.mod` and cooresponding `go.sum` 
+* **OPTIONAL** `manifest.json` (see below)
+* **OPTIONAL** `README.md`
+
+### Auto Configuration
+
+If you include a `manifest.json` the system will automatically parse it and fill out the Template form accordingly. You can provide as many of the following as you choose:
+
+```
+{
+  "title": "Name to show in UI",
+  "engine": "python3",   // python3, golang, or nodejs
+  "arguments": [
+    {"key":"keynameinscript", "friendlyName":"Name in UI"}
+  ],
+  "icon": "data_array",   // material design icon
+  "link": "",  // external web link to documentation
+  "revision": 1 // integer
+}
+```
+
 ## Extensions
 Certain pages, such as the Executions page, can optionally put MongoDB Charts (or any other iframe embeddable chart for that matter) at the top.
 

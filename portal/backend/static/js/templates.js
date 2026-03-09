@@ -56,7 +56,36 @@ function init() {
 
         delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms))
-        },          
+        },
+
+        async handleFileSelect(files) {
+            if (!files || files.length === 0) return;
+            this.file = files;
+            
+            try {
+                const zip = await JSZip.loadAsync(files[0]);
+                const manifestFile = zip.file('manifest.json');
+                
+                if (manifestFile) {
+                    const manifestContent = await manifestFile.async('string');
+                    const manifest = JSON.parse(manifestContent);
+                    
+                    // Fill form values from manifest
+                    if (manifest.title) this.selectedTemplate.title = manifest.title;
+                    if (manifest.engine) this.selectedTemplate.engine = manifest.engine;
+                    if (manifest.icon) this.selectedTemplate.icon = manifest.icon;
+                    if (manifest.link) this.selectedTemplate.link = manifest.link;
+                    if (manifest.revision) this.selectedTemplate.revision = manifest.revision;
+                    if (manifest.arguments && Array.isArray(manifest.arguments)) {
+                        this.selectedTemplate.arguments = manifest.arguments;
+                    }
+                    
+                    console.log('Manifest loaded:', manifest);
+                }
+            } catch (e) {
+                console.error('Error reading zip or manifest:', e);
+            }
+        },
 
 
     }

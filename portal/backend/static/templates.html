@@ -13,6 +13,7 @@
         <title>Executor</title>
 
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.lime.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
@@ -84,8 +85,17 @@
                         <input type="text" placeholder="Link for user to read" name="link" x-model="selectedTemplate.link">
 
                         <label for="file">Zip File</label>
-                        <span x-text="file ? file.name : 'Choose zip file...'"></span>
-                        <input type="file" accept=".zip" x-on:change="file = Object.values($event.target.files)" />
+                        <div class="dropzone"
+                            x-data="{ isDragging: false }"
+                            x-on:dragover.prevent="isDragging = true"
+                            x-on:dragenter.prevent="isDragging = true"
+                            x-on:dragleave.prevent="isDragging = false"
+                            x-on:drop.prevent="isDragging = false; handleFileSelect([...$event.dataTransfer.files].filter(f => f.name.endsWith('.zip')))"
+                            :class="{ 'dropzone-active': isDragging }">
+                            <span class="material-symbols-outlined dropzone-icon">upload_file</span>
+                            <p x-text="file && file.length ? file[0].name : 'Drag & drop a .zip file here, or click to browse'"></p>
+                            <input type="file" accept=".zip" x-on:change="handleFileSelect(Object.values($event.target.files))" />
+                        </div>
 
                         <table>
                             <thead>

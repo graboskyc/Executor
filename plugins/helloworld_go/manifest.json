@@ -1,0 +1,8 @@
+{
+  "title": "Hello World Go",
+  "engine": "golang",
+  "arguments": [],
+  "icon": "code",
+  "link": "https://github.com/graboskyc/Executor/tree/main/plugins/helloworld_go",
+  "revision": 10
+}

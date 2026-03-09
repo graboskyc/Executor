@@ -1,0 +1,8 @@
+{
+  "title": "Hello World Bun",
+  "engine": "nodejs",
+  "arguments": [],
+  "icon": "code",
+  "link": "https://github.com/graboskyc/Executor/tree/main/plugins/helloworld_bun",
+  "revision": 10
+}
