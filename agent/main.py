@@ -22,11 +22,13 @@ while True:
     os.environ["EXECUTORPORTAL"] = server
 
     wasThereAnError = False
+    wasAPayload = False
 
     if "nextPoll" in resObj:
         nextPoll = int(resObj["nextPoll"])
 
     for wf in resObj['workflow']["wf"]:
+        wasAPayload = True
         print("--------------------BEGIN WORKFLOW----------------------")
         execId = resObj["_id"]["$oid"]
         try:
@@ -122,4 +124,6 @@ while True:
             response = requests.post(f"{server}/api/exec/completeExecution/"+execId, json = postObj)
 
     #print("Sleeping")
-    time.sleep(nextPoll)
+    # Only sleep if I had nothing to do, otherwise there is probably more work for me to do ASAP
+    if not wasAPayload:
+        time.sleep(nextPoll)
